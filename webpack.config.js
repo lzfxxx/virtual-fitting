@@ -18,6 +18,13 @@ module.exports = function (webpackConfig) {
   //   loader: 'es3ify-loader',
   // });
 
+  //for superagent
+  //webpackConfig.babel.plugins.push(new webpack.DefinePlugin({ "global.GENTLY": false }));
+  // webpackConfig.node = {
+  //   __dirname: true,
+  // };
+
+
   // Parse all less files as css module.
   webpackConfig.module.loaders.forEach(function(loader, index) {
     if (typeof loader.test === 'function' && loader.test.toString().indexOf('\\.less$') > -1) {
@@ -27,6 +34,12 @@ module.exports = function (webpackConfig) {
       loader.test = /\.less$/;
     }
   });
+
+
+  // for request
+  webpackConfig.module.noParse = [
+  /node_modules\/json-schema\/lib\/validate\.js/
+  ];
 
   // Load src/entries/*.js as entry automatically.
   const files = glob.sync('./src/entries/*.js');

@@ -1,11 +1,13 @@
 import React, { Component, PropTypes } from 'react';
 import { Button } from 'antd';
+import { Router, Route, IndexRoute, Link } from 'react-router';
 import styles from './Start.less';
+require('es6-promise').polyfill();
 import fetch from 'isomorphic-fetch';
-import 'es6-promise';
 
 
-const URL = 'http://127.0.0.1:5000/';
+
+const URL = 'http://127.0.0.1:5000/api';
 
 class StartPage extends Component {
 
@@ -19,21 +21,23 @@ class StartPage extends Component {
   componentDidMount() {
     var myHeaders = new Headers();
 
-    var myInit = { method: 'GET',
-      headers: myHeaders,
-      mode: 'no-cors',
-      cache: 'default' };
+    // var myInit = { method: 'GET',
+    //   headers: myHeaders,
+    //   mode: 'no-cors',
+    //   cache: 'default' };
     //console.log(URL);
 
-    // fetch(URL, myInit)
-    //   .then(function(response) {
-    //     if (response.status >= 400) {
-    //       throw new Error("Bad response from server");
-    //     }
-    //     return response.json();
-    //   })
-    //   .then(function(stories) {
-    //     console.log(stories);
+    var data = {"a": "1"};
+
+    // fetch(URL, {method: 'PUT',  body: JSON.stringify({
+    //   name: 'Hubot',
+    //   login: 'hubot',
+    // })});
+    //
+    // fetch(URL, {method: 'GET'})
+    //   .then((response) => response.json())
+    //   .then((json) => {
+    //     this.setState({world: json.response});
     //   });
   }
 
@@ -41,9 +45,11 @@ class StartPage extends Component {
     return (
       <div className={styles.normal}>
         <div className={styles.container}>
-          <h1 className={styles.title}>Fitting Room</h1>
-          <p className={styles.desc}>A Virtual Fitting Room{this.state.world}</p>
-          <a href="/Upload"><Button type="primary" style={{ marginTop: 5 }}>Getting Started</Button></a>
+          <h1 className={styles.title}>A Virtual Fitting Room</h1>
+          <p className={styles.desc}>Description</p>
+          <p className={styles.desc}>DescriptionDescriptionDescriptionDescription</p>
+          <p className={styles.desc}>DescriptionDescriptionDescriptionDescription</p>
+          <Link to="/Upload"><Button type="primary" style={{ marginTop: 5 }}>Getting Started</Button></Link>
         </div>
       </div>
     );

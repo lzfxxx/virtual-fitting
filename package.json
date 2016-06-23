@@ -18,6 +18,9 @@
     "react": "^15.0.2",
     "react-dom": "^15.0.2",
     "react-router": "^2.0.1",
+    "request": "^2.72.0",
+    "site": "^0.11.6",
+    "superagent": "^2.0.0",
     "whatwg-fetch": "^1.0.0"
   },
   "devDependencies": {

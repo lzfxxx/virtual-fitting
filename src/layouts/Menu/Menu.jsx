@@ -1,5 +1,5 @@
 import React, { Component, PropTypes } from 'react';
-import { Router, Route, IndexRoute, Link } from 'react-router';
+import { Router, Route, IndexRoute, Link , browserHistory} from 'react-router';
 import {
   Menu,
   Breadcrumb,
@@ -13,6 +13,7 @@ import {
 const SubMenu = Menu.SubMenu;
 import styles from  './Menu.less';
 import Login from '../Login/Login';
+import Signup from '../Signup/Signup';
 
 class Sider extends Component {
 
@@ -22,11 +23,13 @@ class Sider extends Component {
       current: '1',
       loading: false,
       visible: false,
+      signvisible: false,
+      login: false,
     };
   }
 
   showModal() {
-    console.log("adklsjadashdlahlajhfkhfkla");
+    browserHistory.push('/');
     this.setState({
       visible: true,
     });
@@ -38,8 +41,17 @@ class Sider extends Component {
       this.setState({ loading: false, visible: false });
     }, 3000);
   }
+  showSign() {
+    this.setState({
+      visible: false,
+      signvisible: true,
+    });
+  }
   handleCancel() {
-    this.setState({ visible: false });
+    this.setState({
+      visible: false,
+      signvisible: false,
+    });
   }
 
   handleClick(e) {
@@ -60,7 +72,7 @@ class Sider extends Component {
             <SubMenu key="sub1"
                      title={<span>
                      <Icon type="user" />
-                     <Link to="/">Fitting Room</Link><br />
+                     <Link to="/authed">Fitting Room</Link><br />
                      </span>}
             >
               <Menu.Item key="1">
@@ -99,22 +111,9 @@ class Sider extends Component {
               <Col span={6}> </Col>
               <Col span={6}> </Col>
               <Col span={6} className={styles.col}>
-                <Button type="ghost" icon="user" onClick={() => this.showModal()}>
-                  Login
+                <Button type="ghost" icon="logout" onClick={() => this.showModal()}>
+                  Logout
                 </Button>
-                <Modal ref="modal"
-                       visible={this.state.visible}
-                       title="Login" onOk={() => this.handleOk()} onCancel={() => this.handleCancel()}
-                       footer={[
-            <Button key="back" type="ghost" size="large" onClick={() => this.handleCancel()}>Cancel</Button>,
-            <Button key="submit" type="primary" size="large" loading={this.state.loading} onClick={() => this.handleOk()}>
-              Login
-            </Button>,
-          ]}
-                >
-
-                  <Login />
-                </Modal>
               </Col>
             </Row>
           </div>

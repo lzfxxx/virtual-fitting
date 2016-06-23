@@ -2,7 +2,7 @@ import React, { Component, PropTypes } from 'react';
 
 import { Upload, Icon, Modal } from 'antd';
 
-//import styles from './Upload.less';
+import styles from './Upload.less';
 
 class ImageUploadList extends Component {
 
@@ -18,6 +18,21 @@ class ImageUploadList extends Component {
     this.setState({
       priviewVisible: false,
     });
+    
+    ///////////////////////////////////////////
+    // request
+    //   .put('http://127.0.0.1:5000/user1')
+    //   .set('Content-Type', 'application/json')
+    //   .send('{"img":"888888888888"}')
+    //   .end(function(err, res){
+    //     if (err) {
+    //       console.log("Error!!!");
+    //
+    //     } else {
+    //       console.log("Ok!!!");
+    //
+    //     }
+    //   });
   }
   render() {
     const props = {
@@ -38,21 +53,27 @@ class ImageUploadList extends Component {
       },
     };
     return (
-      <div className="clearfix">
-        <Upload {...props}>
-          <Icon type="plus" />
-          <div className="ant-upload-text">Upload</div>
-        </Upload>
-        <a href="https://os.alipayobjects.com/rmsportal/NDbkJhpzmLxtPhB.png" target="_blank" className="upload-example">
-          <img alt="example" src="https://os.alipayobjects.com/rmsportal/NDbkJhpzmLxtPhB.png" />
-          <span>Example</span>
-        </a>
-        <Modal visible={this.state.priviewVisible} footer={null} onCancel={this.handleCancel}>
-          <img alt="example" src={this.state.priviewImage} />
-        </Modal>
+      <div className={styles.container}>
+        <div className="clearfix">
+          <Upload {...props}>
+            <Icon type="plus" />
+            <div className="ant-upload-text">Upload</div>
+          </Upload>
+          <Modal visible={this.state.priviewVisible} footer={null} onCancel={this.handleCancel}>
+            <img alt="example" src={this.state.priviewImage} />
+          </Modal>
+        </div>
       </div>
     );
   }
 }
 
 module.exports = ImageUploadList;
+
+
+/*
+ <a href="https://os.alipayobjects.com/rmsportal/NDbkJhpzmLxtPhB.png" target="_blank" className="upload-example">
+ <img alt="example" src="https://os.alipayobjects.com/rmsportal/NDbkJhpzmLxtPhB.png" />
+ <span>Example</span>
+ </a>
+ */

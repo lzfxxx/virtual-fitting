@@ -19,7 +19,7 @@ function check404(res) {
 
 function jsonParse(res) {
   return res.json().then(jsonResult => ({ ...res, jsonResult }));
-}
+}cd
 
 function errorMessageParse(res) {
   const { success, message } = res.jsonResult;
