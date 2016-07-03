@@ -21,13 +21,15 @@ let Login = React.createClass({
 
     var loged = false;
     var error = false;
-
+    console.log(e);
+    console.log(this);
+    var url = 'http://127.0.0.1:5000/'+username;
     //get by superagent and flask
     request
-      .get('http://127.0.0.1:5000/user/')
+      .get(url)
      //.withCredentials()
       .auth(username, password)
-      .end(function(err, res){
+      .end((err, res) => {
         if (err) {
           console.log("Error!!!");
           loged = false;
@@ -37,8 +39,11 @@ let Login = React.createClass({
           loged = true;
           error = false;
           console.log("link");
+          window.u = username;
+          window.p = password;
           browserHistory.push('/start');
         }
+        this.setState({loged: loged, error: error});
       });
 
 
@@ -67,8 +72,6 @@ let Login = React.createClass({
     // });
 
 
-    
-
     //request by 'request' with Flask_restful
     // request(
     //   { method: 'PUT',
@@ -84,8 +87,6 @@ let Login = React.createClass({
     //     }
     //   }
     // );
-    console.log(loged,error);
-    this.setState({loged: loged, error: error});
   },
 
   renderLogin() {
@@ -95,7 +96,7 @@ let Login = React.createClass({
       return (
         <div >
           <Button type="primary" htmlType="submit">Login</Button>
-          <font size="2" color="darkgrey">Incorrect username or password!</font>
+          <font size="2" color="darkgrey">   Incorrect username or password!</font>
         </div>);
     }
     console.log("nolink");

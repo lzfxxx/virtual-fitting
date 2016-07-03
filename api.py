@@ -1,11 +1,17 @@
-from flask import Flask, jsonify, request
+from flask import Flask, jsonify, request, make_response,redirect,url_for
 from flask_restful import reqparse, abort, Api, Resource
 from flask_pymongo import PyMongo
+from flask_httpauth import HTTPBasicAuth
+
+UPLOAD_FOLDER = 'file-uploads'
+ALLOWED_EXTENSIONS = set(['png', 'jpg', 'jpeg', 'gif'])
 
 app = Flask(__name__)
 app.config["MONGO_DBNAME"] = "users_db"
+app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 mongo = PyMongo(app)
 api = Api(app)
+auth = HTTPBasicAuth()
 
 APP_URL = "http://127.0.0.1:5000"
 
@@ -27,6 +33,19 @@ USERS = {
   },
 }
 
+@auth.get_password
+def get_password(username):
+  user = mongo.db.users.find_one({"username": username})
+  if user:
+    return user.get('password')
+  return None
+
+
+@auth.error_handler
+def unauthorized():
+  # return 403 instead of 401 to prevent browsers from displaying the default
+  # auth dialog
+  return make_response(jsonify({'message': 'Unauthorized access'}), 403)
 
 def abort_if_user_doesnt_exist(user_id):
   if user_id not in USERS:
@@ -36,9 +55,8 @@ parser = reqparse.RequestParser()
 parser.add_argument('img')
 
 
-# Todo
-# shows a single todo item and lets you delete a todo item
 class User(Resource):
+  decorators = [auth.login_required]
   def get(self, user_id):
     data = []
 
@@ -59,10 +77,23 @@ class User(Resource):
     mongo.db.users.update({'username': user_id}, {'$set': data})
     return "ok", 201
 
+class Image(Resource):
+  # decorators = [auth.login_required]
+  def get(self, user_id, filename):
+    filename = user_id + '_' + filename
+    print filename
+    return mongo.send_file(filename)
 
-# TodoList
-# shows a list of all todos, and lets you POST to add new tasks
+  def post(self, user_id, filename):
+    print(request.files['file'])
+    filename = user_id + '_' + filename
+    print filename
+    mongo.save_file(filename,request.files['file'])
+    return mongo.send_file(filename)
+
+
 class UserList(Resource):
+  # decorators = [auth.login_required]
   def get(self):
     data = []
 
@@ -97,10 +128,11 @@ class UserList(Resource):
 ##
 api.add_resource(UserList, '/', endpoint="users")
 api.add_resource(User, '/<user_id>', endpoint="username")
+api.add_resource(Image, '/<user_id>/<filename>', endpoint="image")
 
 @app.after_request
 def after_request(response):
-  response.headers.add('Access-Control-Allow-Origin', 'http://127.0.0.1:8989')
+  response.headers.add('Access-Control-Allow-Origin', '*')
   response.headers.add('Access-Control-Allow-Headers', 'Content-Type,Authorization,X-Requested-With')
   response.headers.add('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE')
   response.headers.add('Access-Control-Allow-Credentials', 'true')

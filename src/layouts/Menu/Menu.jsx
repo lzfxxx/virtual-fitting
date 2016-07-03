@@ -26,6 +26,7 @@ class Sider extends Component {
       signvisible: false,
       login: false,
     };
+    console.log(window.u,window.p);
   }
 
   showModal() {
