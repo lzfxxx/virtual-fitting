@@ -14,8 +14,10 @@ class StartPage extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      world: "hehehe"
+      world: "hehehe",
+      //user: this.props.params.userId,
     };
+    //window.u = this.props.params.userId;
   }
 
   componentDidMount() {
@@ -39,6 +41,8 @@ class StartPage extends Component {
     //   .then((json) => {
     //     this.setState({world: json.response});
     //   });
+    // console.log(this.state.user);
+    // console.log(this.props.params);
   }
 
   render() {

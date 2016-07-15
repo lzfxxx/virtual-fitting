@@ -27,6 +27,7 @@ class Sider extends Component {
       login: false,
     };
     console.log(window.u,window.p);
+    //console.log(this.props.params.userId);
   }
 
   showModal() {
@@ -77,16 +78,19 @@ class Sider extends Component {
                      </span>}
             >
               <Menu.Item key="1">
-                <Link to="/start">1. Getting Started</Link><br />
+                <Link to={`/start/`}>1. Get Started</Link><br />
               </Menu.Item>
               <Menu.Item key="2">
-                <Link to="/upload">2. Upload Photos</Link><br />
+                <Link to={`/upload/`}>2. Upload Photos</Link><br />
               </Menu.Item>
               <Menu.Item key="3">
-                <Link to="/adjust">3. Adjust Photos</Link><br />
+                <Link to={`/adjust/`}>3. Adjust Photos</Link><br />
               </Menu.Item>
               <Menu.Item key="4">
-                <Link to="/results">4. Results</Link>
+                <Link to={`/mark/`}>4. Mark Key Points</Link><br />
+              </Menu.Item>
+              <Menu.Item key="5">
+                <Link to={`/results/`}>5. Results</Link>
               </Menu.Item>
             </SubMenu>
             <SubMenu key="sub2" title={<span><Icon type="user" /><Link to="/other">Other</Link></span>}>

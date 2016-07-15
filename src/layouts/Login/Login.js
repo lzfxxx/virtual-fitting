@@ -2,12 +2,13 @@ import React, { Component, PropTypes } from 'react';
 import { Router, Route, IndexRoute, Link, browserHistory } from 'react-router';
 import { Form, Input, Button, Checkbox } from 'antd';
 import request from 'superagent';
+let jsonp = require('superagent-jsonp');
 
 const FormItem = Form.Item;
 let Login = React.createClass({
   getInitialState() {
     return {
-      loged: false,
+      logged: false,
       error: false,
     }
   },
@@ -19,7 +20,7 @@ let Login = React.createClass({
     var password = this.props.form.getFieldsValue().password;
 
 
-    var loged = false;
+    var logged = false;
     var error = false;
     console.log(e);
     console.log(this);
@@ -27,23 +28,24 @@ let Login = React.createClass({
     //get by superagent and flask
     request
       .get(url)
-     //.withCredentials()
+      //.withCredentials()
       .auth(username, password)
       .end((err, res) => {
         if (err) {
           console.log("Error!!!");
-          loged = false;
+          logged = false;
           error = true;
         } else {
           console.log(res);
-          loged = true;
+          logged = true;
           error = false;
           console.log("link");
           window.u = username;
           window.p = password;
-          browserHistory.push('/start');
+          var url = '/start/';// + username;
+          browserHistory.push(url);
         }
-        this.setState({loged: loged, error: error});
+        this.setState({logged: logged, error: error});
       });
 
 

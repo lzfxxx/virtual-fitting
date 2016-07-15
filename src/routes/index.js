@@ -5,6 +5,8 @@ import App from '../components/App';
 import Start from '../components/Start/Start';
 import Upload from '../components/Upload/Upload';
 import NotFound from '../components/NotFound';
+import Adjust from '../components/Adjust/Adjust';
+import Mark from '../components/Mark/Mark';
 
 const Routes = ({ history }) =>
   <Router history={history}>
@@ -13,7 +15,8 @@ const Routes = ({ history }) =>
     <Route path="/authed" component={App}>
       <Route path="/start" component={Start}/>
       <Route path="/upload" component={Upload} />
-      <Route path="/adjust" component={NotFound} />
+      <Route path="/adjust" component={Adjust} />
+      <Route path="/mark" component={Mark} />
       <Route path="/results" component={NotFound} />
       <Route path="/other" component={NotFound} />
       <Route path="/1" component={NotFound} />
