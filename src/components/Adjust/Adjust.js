@@ -2,12 +2,19 @@ import React, {Component} from 'react';
 import Cropper from 'react-cropper';
 import styles from './Adjust.less';
 import 'cropperjs/dist/cropper.css';
-import { Icon, Modal, Button } from 'antd';
+import { Icon, Modal, Button, Tabs,message} from 'antd';
 import request from 'superagent';
 //import fs from 'fs';
 
+const TabPane = Tabs.TabPane;
 
-const src = 'http://127.0.0.1:5000/user1/img1.jpg';
+// const URL1 = 'http://0.0.0.0:5000/' + window.u + '/img1.jpg';
+// const URL2 = 'http://0.0.0.0:5000/' + window.u + '/img2.jpg';
+// const URL3 = 'http://0.0.0.0:5000/' + window.u + '/img3.jpg';
+
+// const URL1 = 'http://0.0.0.0:5000/' + 'user1' + '/img1.jpg';
+// const URL2 = 'http://0.0.0.0:5000/' + 'user1' + '/img2.jpg';
+// const URL3 = 'http://0.0.0.0:5000/' + 'user1' + '/img3.jpg';
 
 function base64ToBlob(base64, mime)
 {
@@ -32,6 +39,37 @@ function base64ToBlob(base64, mime)
   return new Blob(byteArrays, {type: mime});
 }
 
+class CropperPage extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      URL1: 'http://0.0.0.0:5000/' + this.props.params.username + '/img1.jpg',
+      URL2: 'http://0.0.0.0:5000/' + this.props.params.username + '/img2.jpg',
+      URL3: 'http://0.0.0.0:5000/' + this.props.params.username + '/img3.jpg'
+    };
+  }
+
+  render() {
+    function callback(key) {
+      console.log(key);
+    }
+
+    return (
+      <Tabs defaultActiveKey="1" onChange={callback}>
+        <TabPane tab="Image1" key="1" className={styles.tab}>
+          <MyCropper URL={this.state.URL1}/>
+        </TabPane>
+        <TabPane tab="Image2" key="2" className={styles.tab}>
+          <MyCropper URL={this.state.URL2}/>
+        </TabPane>
+        <TabPane tab="Image3" key="3" className={styles.tab}>
+          <MyCropper URL={this.state.URL3}/>
+        </TabPane>
+      </Tabs>
+    );
+  }
+}
+
 // function getCursorPosition(canvas, event) {
 //   var rect = canvas.getBoundingClientRect();
 //   var x = event.clientX - rect.left;
@@ -40,16 +78,25 @@ function base64ToBlob(base64, mime)
 //   console.log("hereeeeeeeeeee");
 // }
 
-class Copper extends Component {
+class MyCropper extends Component {
   constructor(props) {
     super(props);
+    var s = this.props.URL+'?t='+new Date().getTime();
+    const src = this.props.URL;
     this.state = {
       src,
-      cropResult: src,
+      cropResult: s,
+      iconLoading: false,
+      isImg: "unknown"
     };
     this._cropImage = this._cropImage.bind(this);
     this._onChange = this._onChange.bind(this);
-    this._useDefaultImage = this._useDefaultImage.bind(this);
+    //this._useDefaultImage = this._useDefaultImage.bind(this);
+    this.hide = message.loading('Loading Images...', 1);
+  }
+
+  componentDidMount() {
+
   }
 
   _cropImage() {
@@ -90,20 +137,44 @@ class Copper extends Component {
 
     // var bitmap = new Buffer(this.state.cropResult, 'base64');
     // fs.writeFileSync('../../img/img1.jpg', bitmap);
-
+    this.setState({ iconLoading: true });
+    this.hide = message.loading('Uploading...', 0);
     request
-      .post('http://127.0.0.1:5000/user1/img1.jpg')
+      .post(this.props.URL)
       //.type('form')
       //.attach("image-file", image, 'user1_img1.jpg')
       .send(formData)
       .end((err, res) => {
         if (err) {
           console.log(err);
+          message.error("Upload Failed");
+
         } else {
           console.log(res.status);
+          if(res.status='200') {
+            message.success('Upload Succeed');
+
+          }
           //console.log(res.text);
         }
       });
+    this.setState({
+      iconLoading: false
+    }, () => {
+      setTimeout(this.hide, 0);
+    });
+  }
+  getMessage() {
+    // if(this.state.isImg === "unknown") {
+    //   this.hide = message.loading('Loading Images...', 0);
+    // }
+    if(this.state.isImg === "true") {
+      return
+    } else if(this.state.isImg === "false") {
+      message.error('Loading Failed');
+    } else {
+      this.hide = message.loading('Loading Images...', 0);
+    }
   }
 
   _onChange(e) {
@@ -121,16 +192,22 @@ class Copper extends Component {
     reader.readAsDataURL(files[0]);
   }
 
-  _useDefaultImage() {
-    this.setState({ src });
-  }
+  // _useDefaultImage() {
+  //   this.setState({ src });
+  // }
 
   render() {
+    // this.getMessage();
     return (
       <div className={styles.container}>
         <div style={{ width: '50%'}} className={styles.container2}>
           <Cropper
-            style={{ height: 400, width: '80%' }}
+            style={{
+              //width: '100%',
+              //height: '100%',
+              //objectFit: 'contain'
+              height: '80%', width: '80%'
+            }}
             aspectRatio={1 / 1}
             preview=".img-preview"
             guides={false}
@@ -139,13 +216,11 @@ class Copper extends Component {
             crop={this._crop}
           />
           <br />
+          <br />
           <Button type="ghost" onClick={ this._cropImage } style={{ float: 'right' }}>
             Crop Image
           </Button>
           <br />
-          <Button type="ghost" onClick={ ()=>this._uploadImage() } style={{ float: 'right' }}>
-            Upload
-          </Button>
         </div>
 
         <div className={styles.container2}>
@@ -162,13 +237,18 @@ class Copper extends Component {
             //height: 400
             }} src={this.state.cropResult} />
           </div>
+          <div style={{ width: '100%', float: 'right' ,height: '100%'}} className={styles.container4}>
+            <Button type="ghost" icon="upload" loading={this.state.iconLoading} onClick={ ()=>this._uploadImage() } style={{ float: 'right' }}>
+              Upload
+            </Button>
+          </div>
         </div>
       </div>
     );
   }
 }
 
-export default Copper;
+export default CropperPage;
 
 /*
  <input type="file" onChange={this._onChange} />

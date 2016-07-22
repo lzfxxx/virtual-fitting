@@ -10,19 +10,19 @@ import Mark from '../components/Mark/Mark';
 
 const Routes = ({ history }) =>
   <Router history={history}>
-    <Route path="/" component={StartPage}>
+    <Route path="/index" component={StartPage}>
     </Route>
-    <Route path="/authed" component={App}>
-      <Route path="/start" component={Start}/>
-      <Route path="/upload" component={Upload} />
-      <Route path="/adjust" component={Adjust} />
-      <Route path="/mark" component={Mark} />
-      <Route path="/results" component={NotFound} />
-      <Route path="/other" component={NotFound} />
-      <Route path="/1" component={NotFound} />
-      <Route path="/2" component={NotFound} />
-      <Route path="/3" component={NotFound} />
-      <Route path="/4" component={NotFound} />
+    <Route path="/" component={App}>
+      <IndexRoute component={Start} />
+      <Route path="upload/:username" component={Upload} />
+      <Route path="adjust/:username" component={Adjust} />
+      <Route path="mark/:username" component={Mark} />
+      <Route path="results/:username" component={NotFound} />
+      <Route path="other" component={NotFound} />
+      <Route path="1" component={NotFound} />
+      <Route path="2" component={NotFound} />
+      <Route path="3" component={NotFound} />
+      <Route path="4" component={NotFound} />
       <Route path="*" component={NotFound}/>
     </Route>
   </Router>;

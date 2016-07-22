@@ -18,6 +18,7 @@ class StartPage extends Component {
       //user: this.props.params.userId,
     };
     //window.u = this.props.params.userId;
+    console.log(window.u);
   }
 
   componentDidMount() {
@@ -52,8 +53,8 @@ class StartPage extends Component {
           <h1 className={styles.title}>A Virtual Fitting Room</h1>
           <p className={styles.desc}>Description</p>
           <p className={styles.desc}>DescriptionDescriptionDescriptionDescription</p>
-          <p className={styles.desc}>DescriptionDescriptionDescriptionDescription</p>
-          <Link to="/Upload"><Button type="primary" style={{ marginTop: 5 }}>Getting Started</Button></Link>
+          <p className={styles.desc}>DescriptionDescriptionDescriptionDescriptionDescriptionDescriptionDescriptionDescription</p>
+          <Link to={`/upload/${this.state.username}`}><Button type="primary" style={{ marginTop: 5 }}>Getting Started</Button></Link>
         </div>
       </div>
     );

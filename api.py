@@ -2,6 +2,8 @@ from flask import Flask, jsonify, request, make_response,redirect,url_for
 from flask_restful import reqparse, abort, Api, Resource
 from flask_pymongo import PyMongo
 from flask_httpauth import HTTPBasicAuth
+from PIL import Image
+import matlab.engine
 
 UPLOAD_FOLDER = 'file-uploads'
 ALLOWED_EXTENSIONS = set(['png', 'jpg', 'jpeg', 'gif'])
@@ -13,7 +15,7 @@ mongo = PyMongo(app)
 api = Api(app)
 auth = HTTPBasicAuth()
 
-APP_URL = "http://127.0.0.1:5000"
+APP_URL = "http://0.0.0.0:5000"
 
 USERS = {
   'user1': {
@@ -59,7 +61,6 @@ class User(Resource):
   decorators = [auth.login_required]
   def get(self, user_id):
     data = []
-
     if user_id:
       user_info = mongo.db.users.find_one({"username": user_id}, {"_id": 0})
       if user_info:
@@ -70,6 +71,7 @@ class User(Resource):
 
   def delete(self, user_id):
     mongo.db.users.remove({'username': user_id})
+    # mongo.db.users.remove({'resized': 'true'})
     return '', 204
 
   def put(self, user_id):
@@ -77,7 +79,7 @@ class User(Resource):
     mongo.db.users.update({'username': user_id}, {'$set': data})
     return "ok", 201
 
-class Image(Resource):
+class ImageUpload(Resource):
   # decorators = [auth.login_required]
   def get(self, user_id, filename):
     filename = user_id + '_' + filename
@@ -85,10 +87,21 @@ class Image(Resource):
     return mongo.send_file(filename)
 
   def post(self, user_id, filename):
-    print(request.files['file'])
+    image = request.files['file']
+    im = Image.open(image)
+    print(image)
+    print(im.size)
+    width, height = im.size
+    if width == height:
+      size = (500, 500)
+      im = im.resize(size)
+      image.seek(0)
+      # mongo.db.users.update({'username': user_id}, {'resized': 'true'})
+    im.save(image, "png")
+    image.seek(0)
     filename = user_id + '_' + filename
     print filename
-    mongo.save_file(filename,request.files['file'])
+    mongo.save_file(filename,image)
     return mongo.send_file(filename)
 
 
@@ -97,7 +110,7 @@ class UserList(Resource):
   def get(self):
     data = []
 
-    cursor = mongo.db.users.find({}, {"_id": 0, "update_time": 0}).limit(10)
+    cursor = mongo.db.users.find()
 
     for user in cursor:
         print user
@@ -123,12 +136,29 @@ class UserList(Resource):
         return {"response": "username number missing"}
 
 
+class Results(Resource):
+  def get(self, user_id):
+    user_info = mongo.db.users.find_one({"username": user_id})
+    LS1 = user_info.get("LS1")
+    RS1 = user_info.get("RS1")
+    eng = matlab.engine.start_matlab()
+    ret = eng.calculation(LS1, RS1)
+    eng.quit()
+    print(ret)
+    return ret
+    # image2 = mongo.send_file(filename2)
+    # image3 = mongo.send_file(filename3)
+
+
+
 ##
 ## Actually setup the Api resource routing here
 ##
 api.add_resource(UserList, '/', endpoint="users")
 api.add_resource(User, '/<user_id>', endpoint="username")
-api.add_resource(Image, '/<user_id>/<filename>', endpoint="image")
+api.add_resource(ImageUpload, '/<user_id>/<filename>', endpoint="image")
+api.add_resource(Results, '/results/<user_id>', endpoint="results")
+
 
 @app.after_request
 def after_request(response):
@@ -138,19 +168,5 @@ def after_request(response):
   response.headers.add('Access-Control-Allow-Credentials', 'true')
   return response
 
-# @app.after_request
-# def add_cors(resp):
-#   """ Ensure all responses have the CORS headers. This ensures any failures are also accessible
-#       by the client. """
-#   resp.headers['Access-Control-Allow-Origin'] = Flask.request.headers.get('Origin','*')
-#   resp.headers['Access-Control-Allow-Credentials'] = 'true'
-#   resp.headers['Access-Control-Allow-Methods'] = 'POST, OPTIONS, GET'
-#   resp.headers['Access-Control-Allow-Headers'] = Flask.request.headers.get(
-#     'Access-Control-Request-Headers', 'Authorization' )
-#   # set low for debugging
-#   if app.debug:
-#     resp.headers['Access-Control-Max-Age'] = '1'
-#   return resp
-
 if __name__ == '__main__':
-  app.run(debug=True)
+  app.run(debug=True, host='0.0.0.0')

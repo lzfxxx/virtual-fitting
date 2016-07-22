@@ -1,127 +1,139 @@
 import React, { Component, PropTypes } from 'react';
-
-import { Upload, Icon, Modal, Button } from 'antd';
-
+import { message, Upload, Icon, Modal, Button } from 'antd';
 import styles from './Upload.less';
+import request from 'superagent';
 
-//const URL1 = 'http://127.0.0.1:5000/' + window.u + '/img1.jpg';
+const img1 = 'http://0.0.0.0:5000/admin/example1.jpg'+'?t='+new Date().getTime();
+const img2 = 'http://0.0.0.0:5000/admin/example2.jpg'+'?t='+new Date().getTime();
+const img3 = 'http://0.0.0.0:5000/admin/example3.jpg'+'?t='+new Date().getTime();
+
+// const URL1 = 'http://0.0.0.0:5000/' + window.u + '/img1.jpg';
+// const URL2 = 'http://0.0.0.0:5000/' + window.u + '/img2.jpg';
+// const URL3 = 'http://0.0.0.0:5000/' + window.u + '/img3.jpg';
+
+// const URL1 = 'http://0.0.0.0:5000/' + 'user1' + '/img1.jpg';
+// const URL2 = 'http://0.0.0.0:5000/' + 'user1' + '/img2.jpg';
+// const URL3 = 'http://0.0.0.0:5000/' + 'user1' + '/img3.jpg';
 
 
-const URL1 = 'http://127.0.0.1:5000/user1/img1.jpg';
+class UploadPage extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      URL1: 'http://0.0.0.0:5000/' + this.props.params.username + '/img1.jpg',
+      URL2: 'http://0.0.0.0:5000/' + this.props.params.username + '/img2.jpg',
+      URL3: 'http://0.0.0.0:5000/' + this.props.params.username + '/img3.jpg'
+    };
+  }
+
+  render() {
+    return (
+      <div className={styles.container}>
+        <ImageUploadList image={img1} URL={this.state.URL1} text={'Upload your front photo'} border={1}/>
+        <ImageUploadList image={img2} URL={this.state.URL2} text={'Upload your side photo'}  border={1}/>
+        <ImageUploadList image={img3} URL={this.state.URL3} text={'Upload your side photo'}  border={0}/>
+      </div>
+    );
+  }
+}
 
 class ImageUploadList extends Component {
 
   constructor(props) {
     super(props);
+    // var src = this.props.URL +'?t='+new Date().getTime();
     this.state = {
-      priviewVisible: false,
-      priviewImage: URL1+'?t='+new Date().getTime(),
-      fileList: [{
-        uid: -1,
-        name: 'img1.jpg',
-        status: 'done',
-        url: URL1,
-      }],
-      x: 1,
+      priviewImage: this.props.image,
+      iconLoading: false,
+      isImg: "unknown"
     };
   }
 
-  handleCancel() {
-    this.setState({
-      priviewVisible: false,
-    });
+  componentDidUpdate() {
 
-    ///////////////////////////////////////////
-    // request
-    //   .put('http://127.0.0.1:5000/user1')
-    //   .set('Content-Type', 'application/json')
-    //   .send('{"img":"888888888888"}')
-    //   .end(function(err, res){
-    //     if (err) {
-    //       console.log("Error!!!");
-    //
-    //     } else {
-    //       console.log("Ok!!!");
-    //
-    //     }
-    //   });
   }
 
+  componentDidMount() {
+    request
+      .get(this.props.URL)
+      //.type('form')
+      //.attach("image-file", image, 'user1_img1.jpg')
+      .end((err, res) => {
+        if (err) {
+          console.log(err);
+          this.setState({
+            isImg: "false",
+          });
+        } else {
+          console.log(res.status);
+          this.setState({
+            priviewImage: this.props.URL+'?t='+new Date().getTime(),
+            isImg: "true",
+          });
+          //console.log(res.text);
+        }
+      });
+    setTimeout(this.hide, 0);
+  }
+
+  getMessage() {
+    // if(this.state.isImg === "unknown") {
+    //   this.hide = message.loading('Loading Images...', 0);
+    // }
+    if(this.state.isImg === "true") {
+      return
+    } else if(this.state.isImg === "false") {
+      return "Please upload image"
+    } else {
+      this.hide = message.loading('Loading Images...', 0);
+    }
+  }
+  enterLoading() {
+    this.setState({ iconLoading: true });
+    this.hide = message.loading('Uploading...', 0);
+  }
   handleChange(info) {
-    // let fileList = info.fileList;
-    //
-    // // 1. 上传列表数量的限制
-    // //    只显示最近上传的一个，旧的会被新的顶掉
-    // fileList = fileList.slice(-2);
-    //
-    // // 2. 读取远程路径并显示链接
-    // fileList = fileList.map((file) => {
-    //   if (file.response) {
-    //     // 组件会将 file.url 作为链接进行展示
-    //     file.url = file.response.url;
-    //   }
-    //   // file.url = URL1;
-    //   return file;
-    // });
-    //
-    // // 3. 按照服务器返回信息筛选成功上传的文件
-    // fileList = fileList.filter((file) => {
-    //   if (file.response) {
-    //     return file.response.status === 'success';
-    //   }
-    //   return true;
-    // });
-    //
-    // this.setState({ fileList });
-    this.setState({
-      priviewImage: URL1+'?t='+new Date().getTime(),
-    });
-    this.setState({
-      x: this.state.x+1,
-    });
-    console.log(this.state.priviewImage);
+    if (info.file.status === 'done') {
+      this.setState({
+        priviewImage: this.props.URL+'?t='+new Date().getTime(),
+        iconLoading: false
+      }, () => {
+        console.log(this.state.iconLoading);
+        setTimeout(this.hide, 0);
+        message.success('Upload Succeed');
+      });
+    } else if (info.file.status === 'error') {
+      setTimeout(this.hide, 0);
+      message.error("Upload Failed");
+    }
   }
 
   render() {
     const props = {
-      action: URL1,
+      action: this.props.URL,
       showUploadList: false,
       //listType: 'picture-card',
       onChange: (e) => this.handleChange(e),
-      onPreview: (file) => {
-        this.setState({
-          priviewImage: file.url,
-          priviewVisible: true,
-        });
-      },
     };
     return (
-      <div className={styles.container}>
-        <div className={styles.imgContainer}>
-          <div className={styles.img}>
-            <img className={styles.imgSelf} alt="img1" src={this.state.priviewImage} />
-          </div>
-          <div className={styles.upload}>
-            <Upload {...props} fileList={this.state.fileList}>
-              <Button type="ghost">
-                <Icon type="upload" /> Upload
-              </Button>
-            </Upload>
-            <Modal visible={this.state.priviewVisible} footer={null} onCancel={(e) => this.handleCancel(e)}>
-              <img alt="example" src={this.state.priviewImage} />
-            </Modal>
-          </div>
+      <div className={styles.imgContainer} style={{borderWidth: this.props.border}}>
+        {this.getMessage()}
+        <div className={styles.img}>
+          <img className={styles.imgSelf} alt="Please upload your image" src={this.state.priviewImage} />
         </div>
-        <div className={styles.imgContainer}>
-        </div>
-        <div className={styles.imgContainer}>
+        <div className={styles.upload}>
+          <Upload {...props} fileList={this.state.fileList} >
+            <Button type="ghost"  icon="upload" loading={this.state.iconLoading} onClick={() => this.enterLoading()}>
+              {this.props.text}
+            </Button>
+          </Upload>
         </div>
       </div>
     );
   }
 }
 
-module.exports = ImageUploadList;
+module.exports = UploadPage;
 
 
 /*

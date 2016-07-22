@@ -36,10 +36,10 @@ module.exports = function (webpackConfig) {
   });
 
 
-  // for request
-  webpackConfig.module.noParse = [
-  /node_modules\/json-schema\/lib\/validate\.js/
-  ];
+  // // for request
+  // webpackConfig.module.noParse = [
+  // /node_modules\/json-schema\/lib\/validate\.js/
+  // ];
 
   // Load src/entries/*.js as entry automatically.
   const files = glob.sync('./src/entries/*.js');

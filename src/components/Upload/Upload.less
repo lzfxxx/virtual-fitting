@@ -54,19 +54,22 @@
   //padding-top: 120px;
   display: flex;
   align-items: center;
+  flex-direction: row;
   justify-content: center;
   //border: 1px solid #ff0000;
 }
 
 .imgContainer {
-  flex: 1/3;
+  //width: 1/3;
+  flex: 1;
+  height: 100%;
   //min-height: 100vh;//calc(100% ~"-" 64px);
   //padding-top: 120px;
-  //display: flex;
+  display: flex;
   align-items: center;
   justify-content: center;
   flex-direction: column;
-  //border: 1px solid #ff0000;
+  border-right: 1px solid grey;
 }
 
 .img {
@@ -76,11 +79,14 @@
   display: flex;
   align-items: center;
   justify-content: center;
+  margin: 16px 16px 16px 16px;
+  //background-color: #333;
+
   //border: 1px solid #ff0000;
 }
 
 .upload {
-  padding-top: 20px;
+  //padding-top: 20px;
   flex: 1/3;
   //min-height: 100vh;//calc(100% ~"-" 64px);
   //padding-top: 120px;
@@ -91,8 +97,11 @@
 }
 
 .imgSelf {
-  height: 500px;
-  width: 300px;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  max-height: 500px;
+  //width: 500px;
 }
 
 .button {

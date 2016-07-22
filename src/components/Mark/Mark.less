@@ -1,5 +1,33 @@
 @diameter: 500px;
 
+.tab {
+  height: 100%;
+}
+
+.container {
+  width: 100%;
+  height: 100%;
+  //min-height: 100vh;//calc(100% ~"-" 64px);
+  //padding-top: 120px;
+  display: flex;
+  //align-items: center;
+  //justify-content: center;
+  flex-direction: row;
+  //border: 1px solid #ff0000;
+}
+
+.container2 {
+  //width: 100%;
+  //height: 100%;
+  //min-height: 100vh;//calc(100% ~"-" 64px);
+  padding-left: 120px;
+  display: flex;
+  //align-items: flex-end;
+  //justify-content: center;
+  flex-direction: column;
+  //border: 1px solid #ff0000;
+}
+
 .radial {
   width: @diameter;
   height: @diameter;
@@ -9,10 +37,16 @@
 
 
 .point{
-  width: 15px;
-  height: 15px;
-  border-radius: 15px;
-  background-color: #888;
+  width: 20px;
+  height: 20px;
+  border-radius: 20px;
+  //border: 1px solid #00ccff;
+  background-color: #00ccff;
   position: absolute;
   transform: translate(-50%,-50%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  font-size: x-small;
 }

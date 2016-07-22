@@ -25,13 +25,13 @@ class Sider extends Component {
       visible: false,
       signvisible: false,
       login: false,
+      username: window.u
     };
     console.log(window.u,window.p);
-    //console.log(this.props.params.userId);
   }
 
   showModal() {
-    browserHistory.push('/');
+    browserHistory.push('/index');
     this.setState({
       visible: true,
     });
@@ -64,33 +64,35 @@ class Sider extends Component {
   }
 
   render() {
-    const { children } = this.props;
+    //const { children } = this.props;
     return (
       <div className={styles.aside}>
         <aside className={styles.sider}>
-          <div className={styles.logo}></div>
+          <div className={styles.logo}>
+
+          </div>
           <Menu mode="inline" theme="light"
                 defaultSelectedKeys={['1']} defaultOpenKeys={['sub1']}>
             <SubMenu key="sub1"
                      title={<span>
                      <Icon type="user" />
-                     <Link to="/authed">Fitting Room</Link><br />
+                     <Link to="/">Fitting Room</Link><br />
                      </span>}
             >
               <Menu.Item key="1">
-                <Link to={`/start/`}>1. Get Started</Link><br />
+                <Link to="/">1. Get Started</Link><br />
               </Menu.Item>
               <Menu.Item key="2">
-                <Link to={`/upload/`}>2. Upload Photos</Link><br />
+                <Link to={`/upload/${this.state.username}`}>2. Upload Photos</Link><br />
               </Menu.Item>
               <Menu.Item key="3">
-                <Link to={`/adjust/`}>3. Adjust Photos</Link><br />
+                <Link to={`/adjust/${this.state.username}`}>3. Adjust Photos</Link><br />
               </Menu.Item>
               <Menu.Item key="4">
-                <Link to={`/mark/`}>4. Mark Key Points</Link><br />
+                <Link to={`/mark/${this.state.username}`}>4. Mark Key Points</Link><br />
               </Menu.Item>
               <Menu.Item key="5">
-                <Link to={`/results/`}>5. Results</Link>
+                <Link to={`/results/${this.state.username}`}>5. Results</Link>
               </Menu.Item>
             </SubMenu>
             <SubMenu key="sub2" title={<span><Icon type="user" /><Link to="/other">Other</Link></span>}>
@@ -116,6 +118,7 @@ class Sider extends Component {
               <Col span={6}> </Col>
               <Col span={6}> </Col>
               <Col span={6} className={styles.col}>
+                <p style={{fontSize: 'large'}}>Welcome! {window.u} &nbsp;</p>
                 <Button type="ghost" icon="logout" onClick={() => this.showModal()}>
                   Logout
                 </Button>
@@ -125,7 +128,7 @@ class Sider extends Component {
           <div className={styles.container}>
             <div className={styles.content}>
               <div style={{ height: 590, borderWidth: 3 }}>
-                {children}
+                {this.props.children}
               </div>
             </div>
           </div>

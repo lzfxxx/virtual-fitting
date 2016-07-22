@@ -2,7 +2,7 @@ import React, { Component, PropTypes } from 'react';
 import { Router, Route, IndexRoute, Link, browserHistory } from 'react-router';
 import { Form, Input, Button, Checkbox } from 'antd';
 import request from 'superagent';
-let jsonp = require('superagent-jsonp');
+// let jsonp = require('superagent-jsonp');
 
 const FormItem = Form.Item;
 let Login = React.createClass({
@@ -19,12 +19,13 @@ let Login = React.createClass({
     var username = this.props.form.getFieldsValue().userName;
     var password = this.props.form.getFieldsValue().password;
 
+    this.setState({ iconLoading: true });
 
     var logged = false;
     var error = false;
     console.log(e);
     console.log(this);
-    var url = 'http://127.0.0.1:5000/'+username;
+    var url = 'http://0.0.0.0:5000/'+username;
     //get by superagent and flask
     request
       .get(url)
@@ -42,10 +43,9 @@ let Login = React.createClass({
           console.log("link");
           window.u = username;
           window.p = password;
-          var url = '/start/';// + username;
-          browserHistory.push(url);
+          browserHistory.push('/');
         }
-        this.setState({logged: logged, error: error});
+        this.setState({logged: logged, error: error, iconLoading: false});
       });
 
 
@@ -97,12 +97,12 @@ let Login = React.createClass({
     if(this.state.error === true) {
       return (
         <div >
-          <Button type="primary" htmlType="submit">Login</Button>
+          <Button type="primary" htmlType="submit" loading={this.state.iconLoading}>Login</Button>
           <font size="2" color="darkgrey">   Incorrect username or password!</font>
         </div>);
     }
     console.log("nolink");
-    return <Button type="primary" htmlType="submit">Login</Button>
+    return <Button type="primary" htmlType="submit" loading={this.state.iconLoading}>Login</Button>
   },
 
 
