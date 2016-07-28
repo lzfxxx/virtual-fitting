@@ -40,8 +40,10 @@ let Signup = React.createClass({
       }
 
       var data = {"username": values.name, "password": values.passwd, "img": "a photo"};
+     
       request
         .post('http://127.0.0.1:5000/')
+        // .post('http://127.0.0.1:8983/solr/gettingstarted/update')
         .set('Content-Type', 'application/json')
         .send(data)
         .end((err, res) => {

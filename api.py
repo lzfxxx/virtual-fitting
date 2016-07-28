@@ -74,10 +74,6 @@ class User(Resource):
     # mongo.db.users.remove({'resized': 'true'})
     return '', 204
 
-  def put(self, user_id):
-    data = request.get_json()
-    mongo.db.users.update({'username': user_id}, {'$set': data})
-    return "ok", 201
 
 class ImageUpload(Resource):
   # decorators = [auth.login_required]
@@ -103,6 +99,11 @@ class ImageUpload(Resource):
     print filename
     mongo.save_file(filename,image)
     return mongo.send_file(filename)
+
+  def put(self, user_id, filename):
+    data = request.get_json()
+    mongo.db.users.update({'username': user_id}, {'$set': data})
+    return "ok", 201
 
 
 class UserList(Resource):

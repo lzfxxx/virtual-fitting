@@ -25,11 +25,16 @@ class MarkPage extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      URL1: 'http://0.0.0.0:5000/' + this.props.params.username + '/img1.jpg',
-      URL2: 'http://0.0.0.0:5000/' + this.props.params.username + '/img2.jpg',
-      URL3: 'http://0.0.0.0:5000/' + this.props.params.username + '/img3.jpg',
-      url: 'http://0.0.0.0:5000/' + this.props.params.username,
-      resultsURL: 'http://0.0.0.0:5000/results/' + this.props.params.username,
+      URL1: 'http://0.0.0.0:5000/' + 'user1' + '/img1.jpg',
+      URL2: 'http://0.0.0.0:5000/' + 'user1' + '/img2.jpg',
+      URL3: 'http://0.0.0.0:5000/' + 'user1' + '/img3.jpg',
+      url: 'http://0.0.0.0:5000/' + 'user1' + '/*',
+      resultsURL: 'http://0.0.0.0:5000/results/' + 'user1',
+      // URL1: 'http://0.0.0.0:5000/' + this.props.params.username + '/img1.jpg',
+      // URL2: 'http://0.0.0.0:5000/' + this.props.params.username + '/img2.jpg',
+      // URL3: 'http://0.0.0.0:5000/' + this.props.params.username + '/img3.jpg',
+      // url: 'http://0.0.0.0:5000/' + this.props.params.username +'/*',
+      // resultsURL: 'http://0.0.0.0:5000/results/' + this.props.params.username,
     };
   }
 
@@ -57,8 +62,8 @@ class MarkPage extends Component {
 var Mark = React.createClass({
   getInitialState: function(){
     return {
-      mouseLS: [-100,-100],
-      mouseRS: [-100,-100],
+      mouseLS: [100,100],
+      mouseRS: [400,100],
       point:"",
       loading: false
     };
@@ -76,8 +81,9 @@ var Mark = React.createClass({
     //   mouseYLS: this.elmOffset.top,
     // });
   },
-  mouseDown: function(event){
+  mouseDown: function(event, point){
     event.preventDefault();
+    this.point = point;
     this.setMousePosition(event);
     document.addEventListener('mousemove',this.mouseMove);
     document.addEventListener('mouseup',this.mouseUp);
@@ -90,7 +96,9 @@ var Mark = React.createClass({
     event.preventDefault();
     this.setMousePosition(event);
   },
-  setMousePosition: function(event){
+  setMousePosition: function(event, point){
+    // event.preventDefault();
+    //console.log(event.pageX, event.pageY);
     //var bounds = this.getCurrentBounds(event.pageX,event.pageY);
     if(event.pageX < this.elmOffset.left) {
       event.pageX = this.elmOffset.left;
@@ -104,8 +112,10 @@ var Mark = React.createClass({
     if(event.pageY > this.elmOffset.top + height) {
       event.pageY = this.elmOffset.top + height;
     }
-    console.log(event.pageX - this.elmOffset.left, event.pageY - this.elmOffset.top);
-    switch(this.state.point) {
+    // console.log(event.pageX - this.elmOffset.left, event.pageY - this.elmOffset.top);
+    // this.setState({mouseLS: [event.pageX - this.elmOffset.left,event.pageY - this.elmOffset.top]});
+    // console.log(point);
+    switch(this.point) {
       case "LS": this.setState({mouseLS: [event.pageX - this.elmOffset.left,event.pageY - this.elmOffset.top]});
         break;
       case "RS": this.setState({mouseRS: [event.pageX - this.elmOffset.left,event.pageY - this.elmOffset.top]});
@@ -228,9 +238,9 @@ var Mark = React.createClass({
     return (
       <div className={styles.container}>
         <div>
-          <img className={styles.radial} src={this.src} onMouseDown={this.mouseDown}/>
-          <div className={styles.point} style={pointStyleLS} >LS</div>
-          <div className={styles.point} style={pointStyleRS} >RS</div>
+          <img className={styles.radial} src={this.src} />
+          <div className={styles.point} style={pointStyleLS} onMouseDown={(e) => this.mouseDown(e,"LS")}>LS</div>
+          <div className={styles.point} style={pointStyleRS} onMouseDown={(e) => this.mouseDown(e,"RS")}>RS</div>
         </div>
         <div className={styles.container2}>
           Press the buttons and mark the points on your photo

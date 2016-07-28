@@ -15,7 +15,7 @@ import styles from  './Menu.less';
 import Login from '../Login/Login';
 import Signup from '../Signup/Signup';
 
-class Sider extends Component {
+class SiderPage extends Component {
 
   constructor(props) {
     super(props);
@@ -64,7 +64,7 @@ class Sider extends Component {
   }
 
   render() {
-    //const { children } = this.props;
+    const { children } = this.props;
     return (
       <div className={styles.aside}>
         <aside className={styles.sider}>
@@ -128,7 +128,7 @@ class Sider extends Component {
           <div className={styles.container}>
             <div className={styles.content}>
               <div style={{ height: 590, borderWidth: 3 }}>
-                {this.props.children}
+                {children}
               </div>
             </div>
           </div>
@@ -141,10 +141,10 @@ class Sider extends Component {
   }
 }
 
-Sider.propTypes = {
-  children: PropTypes.any,
+SiderPage.propTypes = {
+  children: PropTypes.element.isRequired,
 };
 
-export default Sider;
+export default SiderPage;
 
 

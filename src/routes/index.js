@@ -8,6 +8,8 @@ import NotFound from '../components/NotFound';
 import Adjust from '../components/Adjust/Adjust';
 import Mark from '../components/Mark/Mark';
 
+
+
 const Routes = ({ history }) =>
   <Router history={history}>
     <Route path="/index" component={StartPage}>
