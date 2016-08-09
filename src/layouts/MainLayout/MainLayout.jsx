@@ -12,7 +12,7 @@ const MainLayout = ({ children }) => {
         <div className={styles.side}>
           <h2>Filters:</h2>
           <Link to="/">All</Link><br />
-          <Link to="/actived">Actived</Link><br />
+          <Link to="/upload_user1">Actived</Link><br />
           <Link to="/completed">Completed</Link><br />
           <Link to="/404">404</Link><br />
         </div>

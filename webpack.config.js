@@ -35,6 +35,8 @@ module.exports = function (webpackConfig) {
     }
   });
 
+  // webpackConfig.module.loaders.push({ test: /\.json$/, loader: 'json' });
+
 
   // // for request
   // webpackConfig.module.noParse = [

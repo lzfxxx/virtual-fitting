@@ -6,7 +6,6 @@ require('es6-promise').polyfill();
 import fetch from 'isomorphic-fetch';
 
 
-
 const URL = 'http://127.0.0.1:5000/api';
 
 class StartPage extends Component {

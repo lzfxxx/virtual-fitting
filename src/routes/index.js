@@ -7,8 +7,8 @@ import Upload from '../components/Upload/Upload';
 import NotFound from '../components/NotFound';
 import Adjust from '../components/Adjust/Adjust';
 import Mark from '../components/Mark/Mark';
-
-
+import Results from '../components/Results/Results';
+import Three from '../components/react-three/app';
 
 const Routes = ({ history }) =>
   <Router history={history}>
@@ -16,10 +16,10 @@ const Routes = ({ history }) =>
     </Route>
     <Route path="/" component={App}>
       <IndexRoute component={Start} />
-      <Route path="upload/:username" component={Upload} />
-      <Route path="adjust/:username" component={Adjust} />
-      <Route path="mark/:username" component={Mark} />
-      <Route path="results/:username" component={NotFound} />
+      <Route path="upload_:username" component={Upload} />
+      <Route path="adjust_:username" component={Adjust} />
+      <Route path="mark_:username" component={Mark} />
+      <Route path="results_:username" component={Three} />
       <Route path="other" component={NotFound} />
       <Route path="1" component={NotFound} />
       <Route path="2" component={NotFound} />
