@@ -66,24 +66,32 @@ class SceneComponent extends React.Component {
         mainCamera='camera'
         width={window.innerWidth}
         height={window.innerHeight}
-        antialias
+        pixelRatio={window.devicePixelRatio}
+        antialias={true}
+        gammaInput={true}
+        gammaOutput={true}
         shadowMapEnabled={true}
-        clearColor={0xffffff}
+        shadowMapDebug={true}
+        clearColor={this.props.clearColor}
+        onAnimate={this.props.onAnimate}
+        //clearColor={0xffffff}
         forceManualRender={this.props.forceManualRender}
         onManualRenderTriggerCreated={this._onManualRenderTriggerCreated}
       >
         <scene
           ref='scene'
+          fog={this.props.fog}
         >
           <perspectiveCamera
             ref='camera'
             name='camera'
-            fov={50}
+            fov={30}
             aspect={window.innerWidth / window.innerHeight}
             near={1}
-            far={1000}
+            far={10000}
             position={this.props.cameraPosition}
             quaternion={this.props.cameraQuaternion}
+            lookAt={this.props.rotate ? this.props.scenePosition : null}
             //lookAt={new THREE.Vector3(0, 0, 10)}
           />
 

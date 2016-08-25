@@ -7,6 +7,7 @@ import ParsedModel from '../../lib/parsed_model';
 import {isFSA} from 'flux-standard-action';
 // import BBQ from '../../bbq.json';
 import Obj from '../../standard-male-figure.json';
+// import Obj from '../../shirt.json';
 
 let CHANGE_EVENT = 'change';
 
@@ -16,6 +17,8 @@ class SettingsStore extends EventEmitter {
   constructor () {
     super();
 
+    this.xSegs = 10;
+    this.ySegs = 10;
     this.worldRotation = Globals.WORLD_ROTATION;
     this.cameraPosition = new THREE.Vector3(0, -100, 0);
     this.cameraQuaternion = new THREE.Quaternion();
@@ -29,10 +32,10 @@ class SettingsStore extends EventEmitter {
 // assuming we loaded a JSON structure from elsewhere
     var object = loader.parse(Obj);
 
-    console.log(object);
+    // console.log(object);
 
     // add a bit delay so you can see what is happening
-    this.parsedModel.parse(object, {scale: 2});
+    this.parsedModel.parse(object, {scale: 1});
     // setTimeout(() => {
     //   this.parsedModel.load('Obj', {scale: 0.6}).then(
     //     //resolve

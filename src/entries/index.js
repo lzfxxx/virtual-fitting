@@ -9,8 +9,10 @@ import App from '../components/react-three-renderer/js/components/app.react';
 // import App from '../components/three/js/components/app.react';
 // import App from '../components/three-renderer/js/components/app.react';
 
-ReactDOM.render(<App />, document.getElementById('root'));
+// import App from '../components/react-three-renderer/js/components/three/Cloth/index';
+
+// ReactDOM.render(<App />, document.getElementById('root'));
 
 
-// ReactDOM.render(<Routes history={browserHistory} />, document.getElementById('root'));
+ReactDOM.render(<Routes history={browserHistory} />, document.getElementById('root'));
 

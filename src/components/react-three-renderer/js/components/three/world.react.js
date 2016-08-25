@@ -20,17 +20,15 @@ class World extends React.Component{
           key={THREE.Math.generateUUID()} // the key has to be unique otherwise it won't render after an update, I think this is weird
           position={this.props.position}
         >
-          <planeBufferGeometry
-            width={300}
-            height={300}
-            widthSegments={30}
-            heightSegments={30}
+          <circleBufferGeometry
+            radius={30}
+            segments={15}
           />
           <meshBasicMaterial
             opacity={0.5}
             color={0x333000}
             side={THREE.DoubleSide}
-            wireframe
+            wireframe={false}
           />
         </mesh>
         {this.props.children}
@@ -45,3 +43,10 @@ class World extends React.Component{
 // };
 
 export default World;
+
+/*
+ width={60}
+ height={60}
+ widthSegments={30}
+ heightSegments={30}
+ */

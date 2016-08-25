@@ -66,15 +66,33 @@ class Model3D extends React.Component {
     let geometries = this.props.parsedModel.geometries;
     let materialsArray = this.props.parsedModel.materialsArray;
     let materialIndices = this.props.parsedModel.materialIndices;
+    // console.log('geometries');
+    // console.log(geometries);
+
+    // const uuid = "5405FFA6-5372-3096-BA9C-F7443661FF59";
+    // // const uuid = "03A99801-89ED-3205-9CCE-582517865AEC";
+    // let geometry = geometries.get(uuid);
+    // // console.log(geometry.faces);
+    // let material = materialsArray[materialIndices.get(uuid)];
+    // material = createMaterial(material);
+    // meshes = (<mesh
+    //   key={uuid}
+    // >
+    //   <geometry
+    //     vertices={geometry.vertices}
+    //     faces={geometry.faces}
+    //   />
+    //   {material}
+    // </mesh>);
 
     geometries.forEach((geometry, uuid) => {
-      console.log('geometry');
-      console.log(geometry);
+      // console.log('geometry');
+      // console.log(geometry);
 
       // get the right material for this geometry using the material index
       let material = materialsArray[materialIndices.get(uuid)];
-      console.log('material');
-      console.log(material);
+      // console.log('material');
+      // console.log(material);
       // create a react-three-renderer material component
       material = createMaterial(material);
 
@@ -93,9 +111,12 @@ class Model3D extends React.Component {
 
     return(
       <group
+        position={new THREE.Vector3(this.props.position.x, this.props.position.y, this.props.position.z)}
         rotation={new THREE.Euler(this.props.rotation.x, this.props.rotation.y, this.props.rotation.z)}
+        scale={new THREE.Vector3(1, 1, 1)}
       >
         {meshes}
+
       </group>
     );
   }

@@ -1,0 +1,26 @@
+newmtl md_fat_cloth3:Material8981
+illum 4
+Kd 0.00 0.00 0.00
+Ka 0.00 0.00 0.00
+Tf 1.00 1.00 1.00
+map_Kd 407.jpg
+map_Ka 407.jpg
+Ni 1.00
+Ks 0.00 0.00 0.00
+Ns 5.00
+newmtl md_fat_cloth3:Material8987
+illum 4
+Kd 0.00 0.00 0.00
+Ka 0.00 0.00 0.00
+Tf 1.00 1.00 1.00
+Ni 1.00
+Ks 0.00 0.00 0.00
+Ns 5.00
+newmtl md_fat_cloth3:Material8993
+illum 4
+Kd 0.00 0.00 0.00
+Ka 0.00 0.00 0.00
+Tf 1.00 1.00 1.00
+Ni 1.00
+Ks 0.00 0.00 0.00
+Ns 5.00

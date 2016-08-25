@@ -1,0 +1,97 @@
+# MTL Exporter v1.0 by Seungwoo Oh at CLO - Virtual Fashion Inc.
+newmtl M_leg_hand
+Ka 0.400000 0.400000 0.400000
+Kd 0.745098 0.745098 0.745098
+Ks 0.025000 0.025000 0.025000
+Ns 10.000000
+illum 2
+d 1.000000
+map_Kd M_leg_hand.jpg
+map_Ka M_leg_hand.jpg
+newmtl Material8993
+Ka 0.257132 0.257132 0.257132
+Kd 0.819608 0.819608 0.819608
+Ks 0.000000 0.000000 0.000000
+Ns 5.000000
+illum 2
+d 1.000000
+map_Ka 407.jpg
+map_Kd 407.jpg
+newmtl M_body
+Ka 0.400000 0.400000 0.400000
+Kd 0.745098 0.745098 0.745098
+Ks 0.025000 0.025000 0.025000
+Ns 10.000000
+illum 2
+d 1.000000
+map_Kd M_body_east_underwear.jpg
+map_Ka M_body_east_underwear.jpg
+newmtl M_eyelashes
+Ka 0.000000 0.000000 0.000000
+Kd 0.031052 0.002976 0.005463
+Ks 0.000000 0.000000 0.000000
+Ns 5.000000
+illum 2
+d 1.000000
+newmtl M_eye
+Ka 0.231000 0.231000 0.231000
+Kd 0.745098 0.745098 0.745098
+Ks 0.000000 0.000000 0.000000
+Ns 100.000000
+illum 2
+d 1.000000
+map_Kd M_eye.jpg
+map_Ka M_eye.jpg
+newmtl M_eye_specular_Light
+Ka 0.000000 0.000000 0.000000
+Kd 1.000000 1.000000 1.000000
+Ks 1.000000 1.000000 1.000000
+Ns 2.000000
+illum 2
+d 1.000000
+map_d eye_light.png
+newmtl M_face
+Ka 0.400000 0.400000 0.400000
+Kd 0.745098 0.745098 0.745098
+Ks 0.024800 0.024800 0.024800
+Ns 10.000000
+illum 2
+d 1.000000
+map_Kd M_face.jpg
+map_Ka M_face.jpg
+newmtl man_base_V0_1_2_M_hair
+Ka 0.000000 0.000000 0.000000
+Kd 0.745098 0.745098 0.745098
+Ks 0.200000 0.200000 0.200000
+Ns 40.000000
+illum 2
+d 1.000000
+map_Kd M_hair.png
+map_d M_hair.png
+map_Ka M_hair.png
+newmtl ear_dummy1
+Ka 0.000000 0.000000 0.000000
+Kd 0.500000 0.500000 0.500000
+Ks 0.000000 0.000000 0.000000
+Ns 2.000000
+illum 2
+d 1.000000
+map_d transparency.png
+newmtl Material9005
+Ka 0.257132 0.257132 0.257132
+Kd 0.819608 0.819608 0.819608
+Ks 0.000000 0.000000 0.000000
+Ns 5.000000
+illum 2
+d 1.000000
+map_Ka dark gray jergy.jpg
+map_Kd dark gray jergy.jpg
+newmtl Material8999
+Ka 0.257132 0.257132 0.257132
+Kd 0.819608 0.819608 0.819608
+Ks 0.000000 0.000000 0.000000
+Ns 5.000000
+illum 2
+d 1.000000
+map_Ka gray jergey.jpg
+map_Kd gray jergey.jpg

@@ -51,6 +51,6 @@ module.exports = function (webpackConfig) {
     return memo;
   }, {});
   webpackConfig.entry = Object.assign({}, webpackConfig.entry, newEntries);
-
+  //console.log(webpackConfig);
   return webpackConfig;
 };
