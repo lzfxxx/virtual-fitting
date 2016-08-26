@@ -43,9 +43,9 @@ class CropperPage extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      URL1: 'http://0.0.0.0:5000/' + this.props.params.username + '/img1.jpg',
-      URL2: 'http://0.0.0.0:5000/' + this.props.params.username + '/img2.jpg',
-      URL3: 'http://0.0.0.0:5000/' + this.props.params.username + '/img3.jpg'
+      URL1: 'http://0.0.0.0:5500/' + this.props.params.username + '/img1.jpg',
+      URL2: 'http://0.0.0.0:5500/' + this.props.params.username + '/img2.jpg',
+      // URL3: 'http://0.0.0.0:5000/' + this.props.params.username + '/img3.jpg'
     };
   }
 
@@ -61,9 +61,6 @@ class CropperPage extends Component {
         </TabPane>
         <TabPane tab="Image2" key="2" className={styles.tab}>
           <MyCropper URL={this.state.URL2}/>
-        </TabPane>
-        <TabPane tab="Image3" key="3" className={styles.tab}>
-          <MyCropper URL={this.state.URL3}/>
         </TabPane>
       </Tabs>
     );

@@ -3,9 +3,9 @@ import { message, Upload, Icon, Modal, Button } from 'antd';
 import styles from './Upload.less';
 import request from 'superagent';
 
-const img1 = 'http://0.0.0.0:5000/admin/example1.jpg'+'?t='+new Date().getTime();
-const img2 = 'http://0.0.0.0:5000/admin/example2.jpg'+'?t='+new Date().getTime();
-const img3 = 'http://0.0.0.0:5000/admin/example3.jpg'+'?t='+new Date().getTime();
+const img1 = 'http://0.0.0.0:5500/admin/example1.jpg'+'?t='+new Date().getTime();
+const img2 = 'http://0.0.0.0:5500/admin/example2.jpg'+'?t='+new Date().getTime();
+// const img3 = 'http://0.0.0.0:5500/admin/example3.jpg'+'?t='+new Date().getTime();
 
 // const URL1 = 'http://0.0.0.0:5000/' + window.u + '/img1.jpg';
 // const URL2 = 'http://0.0.0.0:5000/' + window.u + '/img2.jpg';
@@ -20,18 +20,17 @@ class UploadPage extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      URL1: 'http://0.0.0.0:5000/' + this.props.params.username + '/img1.jpg',
-      URL2: 'http://0.0.0.0:5000/' + this.props.params.username + '/img2.jpg',
-      URL3: 'http://0.0.0.0:5000/' + this.props.params.username + '/img3.jpg'
+      URL1: 'http://0.0.0.0:5500/' + this.props.params.username + '/img1.jpg',
+      URL2: 'http://0.0.0.0:5500/' + this.props.params.username + '/img2.jpg',
+      // URL3: 'http://0.0.0.0:5500/' + this.props.params.username + '/img3.jpg'
     };
   }
 
   render() {
     return (
       <div className={styles.container}>
-        <ImageUploadList image={img1} URL={this.state.URL1} text={'Upload your front photo'} border={1}/>
-        <ImageUploadList image={img2} URL={this.state.URL2} text={'Upload your side photo'}  border={1}/>
-        <ImageUploadList image={img3} URL={this.state.URL3} text={'Upload your side photo'}  border={0}/>
+        <ImageUploadList image={img2} URL={this.state.URL1} text={'Upload your front photo'} border={1}/>
+        <ImageUploadList image={img1} URL={this.state.URL2} text={'Upload your side photo'}  border={1}/>
       </div>
     );
   }

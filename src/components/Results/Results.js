@@ -4,16 +4,6 @@ require('babel-polyfill');
 import React from 'react';
 import ReactDOM from 'react-dom';
 
-//import App from '../react-three/app';
-// import THREE from 'three';
-// window.onload = function(){
-//
-//   ReactDOM.render(
-//     <App />,
-//     document.getElementById('app')
-//   );
-// };
-
 import JsonObj from './standard-male-figure.json';
 import clothJson from './shirt.json';
 
@@ -51,7 +41,11 @@ class ResultPage extends React.Component {
     var margin = 0.05;
     var hinge;
     var cloth;
+    var cloth2;
     var transformAux1 = new Ammo.btTransform();
+
+    var human;
+
 
     // var clothPositions;
 
@@ -181,8 +175,8 @@ class ResultPage extends React.Component {
 
       p.set( 0, 0, 0 );
       q.set( 0, 0, 0, 1 );
-      // createHumanBody(0, p, q);
-      createCloth(0, p, q);
+      createHumanBody(0, p, q);
+      createCloth(0.9, p, q);
 
       var pos = new THREE.Vector3();
       var quat = new THREE.Quaternion();
@@ -264,16 +258,16 @@ class ResultPage extends React.Component {
       // clothGeometry.translate( clothPos.x, clothPos.y + clothHeight * 0.5, clothPos.z - clothWidth * 0.5 )
       // //var clothMaterial = new THREE.MeshLambertMaterial( { color: 0x0030A0, side: THREE.DoubleSide } );
       // var clothMaterial = new THREE.MeshLambertMaterial( { color: 0xFFFFFF, side: THREE.DoubleSide } );
-      // cloth = new THREE.Mesh( clothGeometry, clothMaterial );
-      // cloth.castShadow = true;
-      // cloth.receiveShadow = true;
-      // scene.add( cloth );
+      // cloth2 = new THREE.Mesh( clothGeometry, clothMaterial );
+      // cloth2.castShadow = true;
+      // cloth2.receiveShadow = true;
+      // scene.add( cloth2 );
       // textureLoader.load( "http://127.0.0.1:8000/ammo.js/examples/textures/grid.png", function( texture ) {
       //   texture.wrapS = THREE.RepeatWrapping;
       //   texture.wrapT = THREE.RepeatWrapping;
       //   texture.repeat.set( clothNumSegmentsZ, clothNumSegmentsY );
-      //   cloth.material.map = texture;
-      //   cloth.material.needsUpdate = true;
+      //   cloth2.material.map = texture;
+      //   cloth2.material.needsUpdate = true;
       // } );
       //
       // // Cloth physic object
@@ -290,11 +284,11 @@ class ResultPage extends React.Component {
       // clothSoftBody.setTotalMass( 0.9, false );
       // Ammo.castObject( clothSoftBody, Ammo.btCollisionObject ).getCollisionShape().setMargin( margin * 3 );
       // physicsWorld.addSoftBody( clothSoftBody, 1, -1 );
-      // cloth.userData.physicsBody = clothSoftBody;
+      // cloth2.userData.physicsBody = clothSoftBody;
       // // Disable deactivation
       // clothSoftBody.setActivationState( 4 );
-
-
+      //
+      //
       // // The base
       // var armMass = 2;
       // var armLength = 3 + clothWidth;
@@ -335,268 +329,106 @@ class ResultPage extends React.Component {
       // The body
       // instantiate a loader
       var loader = new THREE.OBJLoader();
+      const scale = 1;
+      var waist = 90;
 
-      var threeObject;
 // load a resource
       loader.load(
         // resource URL
-        'http://127.0.0.1:8000/models/md_basic_body/md_basic_body.obj',
+        // 'http://127.0.0.1:8000/models/md_basic_body/md_basic_body_scaled.obj',
+        'http://127.0.0.1:8000/models/h170_c91_w71_m/h170_c91_w71_m_scaled.obj',
         // Function when resource is loaded
         function ( object ) {
-          // console.log(object);
-          // scene.add( object );
-          threeObject = object.children[0];
-          console.log(threeObject);
-          // var threeObject = object.children[0];
-          const scale = 0.003;
-          threeObject.scale.set(scale, scale, scale);
-          threeObject.castShadow = true;
-          threeObject.receiveShadow = true;
-          scene.add( threeObject );
-          threeObject.material.materials.forEach(e => {
+          human = object.children[0];
+          console.log(human);
+
+          human.scale.set(scale, scale, scale);
+          human.castShadow = true;
+          human.receiveShadow = true;
+          scene.add( human );
+          human.material.materials.forEach(e => {
             e.color.set(0xffe0bd);
           });
-          // var bodyOnly = threeObject.clone();
-          // bodyOnly.position.set(-5, 0, 0);
-          // scene.add( bodyOnly );
+          var bodyOnly = human.clone();
+          bodyOnly.position.set(-5, 0, 0);
+          scene.add( bodyOnly );
 
-          //Body physic object
-          //var threeObject = new THREE.Mesh( new THREE.BoxGeometry( sx, sy, sz, 1, 1, 1 ), material );
-          var shape = new Ammo.btConvexHullShape();
-          // var shape = new Ammo.btBoxShape( new Ammo.btVector3( sx * 0.5, sy * 0.5, sz * 0.5 ) );
-          var vec = new Ammo.btVector3();
-
-          // console.log(threeObject.geometry.getAttribute('position').array);
-          var vertex =[];
-          var vertices = {};
-          threeObject.geometry.getAttribute('position').array.forEach((e, index) => {
-            if(index%3 === 0) {
-              vertex = [];
-              vertex.push(e);
-            } else if(index%3 === 1) {
-              vertex.push(e);
-            } else if(index%3 === 2) {
-              vertex.push(e);
-              if(!vertices[vertex]) {
-                vertices[vertex] = vertex;
-                var x = vertex[0], y = vertex[1], z = vertex[2];
-                // vec.setValue(v.y*scale, v.z*scale, v.x*scale);
-                vec.setValue(x*scale, y*scale, z*scale*0.8);
-                shape.addPoint(vec);
-              }
-            }
-          });
-          // console.log(vertices);
-          shape.setMargin( margin );
-          createRigidBody( threeObject, shape, mass, pos, quat);
-
+          // physicHuman(mass, pos, quat, scale);
 
           // threeObject.rotation.set(-Math.PI * 0.5, 0, -Math.PI * 0.5);
-          return threeObject;
+          return human;
+
+          // var human2;
+          // loader.load(
+          //   // resource URL
+          //   'http://127.0.0.1:8000/models/h170_c91_w90_m/h170_c91_w90_m_scaled.obj',
+          //   // Function when resource is loaded
+          //   function ( object ) {
+          //     human2 = object.children[0];
+          //     console.log(human2);
+          //     // var threeObject = object.children[0];
+          //     var a1 = human.geometry.attributes.position.array;
+          //     var a2 = human2.geometry.attributes.position.array;
+          //     for(var i = 0; i < a1.length; i++) {
+          //       a1[i] = a1[i] + ((a2[i] - a1[i]) / (90 - 71)) * (waist - 71);
+          //     }
+          //
+          //     console.log("calculated");
+          //
+          //     human.scale.set(scale, scale, scale);
+          //     human.castShadow = true;
+          //     human.receiveShadow = true;
+          //     scene.add( human );
+          //     human.material.materials.forEach(e => {
+          //       e.color.set(0xffe0bd);
+          //     });
+          //
+          //
+          //     // physicHuman(mass, pos, quat, scale);
+          //
+          //     // threeObject.rotation.set(-Math.PI * 0.5, 0, -Math.PI * 0.5);
+          //     return human;
+          //
+          //   }
+          // );
+
         }
       );
+
+
     }
 
-    function createCloth(mass, pos, quat) {
-      // var loader = new THREE.ObjectLoader();
-      //
-      // var object = loader.parse(clothJson);
-      // cloth = object.children[0];
-      // const scale = 0.004;
-      // cloth.scale.set(scale, scale, scale);
-      // cloth.castShadow = true;
-      // cloth.receiveShadow = true;
-      //
-      // cloth.position.copy( new THREE.Vector3(0,0,0) );
-      // cloth.quaternion.copy( new THREE.Quaternion(0,0,0,1) );
-      // cloth.rotation.set(0, 0, -Math.PI);
-      // scene.add( cloth );
-      // return cloth;
+    function physicHuman(mass, pos, quat, scale) {
+      //Body physic object
+      //var threeObject = new THREE.Mesh( new THREE.BoxGeometry( sx, sy, sz, 1, 1, 1 ), material );
+      var shape = new Ammo.btConvexHullShape();
+      // var shape = new Ammo.btBoxShape( new Ammo.btVector3( sx * 0.5, sy * 0.5, sz * 0.5 ) );
+      var vec = new Ammo.btVector3();
 
-      // The cloth
-      // Cloth graphic object
-      // instantiate a loader
-      var loader = new THREE.OBJLoader();
-
-      var threeObject;
-// load a resource
-      loader.load(
-        // resource URL
-        'http://127.0.0.1:8000/models/md_fat_cloth2/md_fat_cloth2_d.obj',
-        // Function when resource is loaded
-        function ( object ) {
-          // console.log(object);
-          // scene.add( object );
-          cloth = object.children[0];
-          console.log(cloth);
-          // var threeObject = object.children[0];
-          const scale = 0.003;
-          cloth.scale.set(scale, scale, scale);
-          cloth.castShadow = true;
-          cloth.receiveShadow = true;
-          scene.add( cloth );
-
-          // var clothOnly = cloth.clone();
-          // clothOnly.position.set(5, 0, 0);
-          // scene.add( clothOnly );
-
-
-          // Cloth physic object
-          //var threeObject = new THREE.Mesh( new THREE.BoxGeometry( sx, sy, sz, 1, 1, 1 ), material );
-          // var shape = new Ammo.btConvexHullShape();
-          // var shape = new Ammo.btBoxShape( new Ammo.btVector3( sx * 0.5, sy * 0.5, sz * 0.5 ) );
-          var vec = new Ammo.btVector3();
-          // var s = new Ammo.btScalar();
-          // console.log(threeObject.geometry.getAttribute('position').array);
-          var vertex =[];
-          var vertices = {};
-          var vs = [];
-          var ss = [];
-          var clothPositions = cloth.geometry.getAttribute('position').array;
-          var i, j, n, p, n2;
-          var g = cloth.geometry;
-          var tmpGeo = new THREE.Geometry().fromBufferGeometry( g );
-          console.log(tmpGeo);
-          tmpGeo.mergeVertices();
-
-          var totalVertices = g.attributes.position.array.length/3;
-          var numVertices = tmpGeo.vertices.length;
-          var numFaces = tmpGeo.faces.length;
-
-          g.realVertices = new Float32Array( numVertices * 3 );
-          g.realIndices = new ( numFaces * 3 > 65535 ? Uint32Array : Uint16Array )( numFaces * 3 );
-
-          i = numVertices;
-          while(i--){
-            p = tmpGeo.vertices[ i ];
-            n = i * 3;
-            g.realVertices[ n ] = p.x;
-            g.realVertices[ n + 1 ] = p.y;
-            g.realVertices[ n + 2 ] = p.z;
+      // console.log(threeObject.geometry.getAttribute('position').array);
+      var vertex =[];
+      var vertices = {};
+      human.geometry.getAttribute('position').array.forEach((e, index) => {
+        if(index%3 === 0) {
+          vertex = [];
+          vertex.push(e);
+        } else if(index%3 === 1) {
+          vertex.push(e);
+        } else if(index%3 === 2) {
+          vertex.push(e);
+          //remove duplicate and add vertices
+          if(!vertices[vertex]) {
+            vertices[vertex] = vertex;
+            var x = vertex[0], y = vertex[1], z = vertex[2];
+            // vec.setValue(v.y*scale, v.z*scale, v.x*scale);
+            vec.setValue(x*scale, y*scale, z*scale);
+            shape.addPoint(vec);
           }
-
-          // if(verticesOnly){
-          //   tmpGeo.dispose();
-          //   return g.realVertices;
-          // }
-
-          i = numFaces;
-          while(i--){
-            p = tmpGeo.faces[ i ];
-            n = i * 3;
-            g.realIndices[ n ] = p.a;
-            g.realIndices[ n + 1 ] = p.b;
-            g.realIndices[ n + 2 ] = p.c;
-          }
-
-          tmpGeo.dispose();
-
-          //g.realIndices = g.getIndex();
-          //g.setIndex(g.realIndices);
-
-          // if(facesOnly){
-          //   var faces = [];
-          //   i = g.realIndices.length;
-          //   while(i--){
-          //     n = i * 3;
-          //     p = g.realIndices[i]*3;
-          //     faces[n] = g.realVertices[ p ];
-          //     faces[n+1] = g.realVertices[ p+1 ];
-          //     faces[n+2] = g.realVertices[ p+2 ];
-          //   }
-          //   return faces;
-          // }
-
-          // // find same point
-          // var ar = [];
-          // var pos = g.attributes.position.array;
-          // i = numVertices;
-          // while(i--){
-          //   n = i*3;
-          //   ar[i] = [];
-          //   j = totalVertices;
-          //   while(j--){
-          //     n2 = j*3;
-          //     if( pos[n2] == g.realVertices[n] && pos[n2+1] == g.realVertices[n+1] && pos[n2+2] == g.realVertices[n+2] ) ar[i].push(j);
-          //   }
-          // }
-          //
-          // // generate same point index
-          // var pPoint = new ( numVertices > 65535 ? Uint32Array : Uint16Array )( numVertices );
-          // var lPoint = new ( totalVertices > 65535 ? Uint32Array : Uint16Array )( totalVertices );
-          //
-          // p = 0;
-          // for(i=0; i<numVertices; i++){
-          //   n = ar[i].length;
-          //   pPoint[i] = p;
-          //   j = n;
-          //   while(j--){ lPoint[p+j] = ar[i][j]; }
-          //   p += n;
-          // }
-
-          g.numFaces = numFaces;
-          g.numVertices = numVertices;
-          g.maxi = totalVertices;
-          // g.pPoint = pPoint;
-          // g.lPoint = lPoint;
-
-
-          // var is = [];
-          // clothPositions.forEach((e, index) => {
-          //   ss.push(e);
-          //   if(index%3 === 0) {
-          //     vertex = [];
-          //     vertex.push(e);
-          //     is.push(index/3);
-          //   } else if(index%3 === 1) {
-          //     vertex.push(e);
-          //   } else if(index%3 === 2) {
-          //     vertex.push(e);
-          //     var x = vertex[0], y = vertex[1], z = vertex[2];
-          //     vec.setValue(x*scale, y*scale, z*scale);
-          //     vs.push(vec);
-          //   }
-          // });
-          // console.log("vs");
-          // // console.log(vs.length);
-          // // console.log(vertices);
-          //
-          var softBodyHelpers = new Ammo.btSoftBodyHelpers();
-          // var clothSoftBody = softBodyHelpers.CreateFromConvexHull( physicsWorld.getWorldInfo(), vs, vs.length, true );
-
-          var clothSoftBody = softBodyHelpers.CreateFromTriMesh( physicsWorld.getWorldInfo(), g.realVertices, g.realIndices, g.numFaces, true );
-
-          // // force nodes
-          // var i = vs.length, n;
-          // while(i--){
-          //   n = i*3;
-          //   clothSoftBody.get_m_nodes().at( i ).set_m_x( vs[i] );
-          //   // clothSoftBody.get_m_nodes().at( i ).set_m_x(new Ammo.btVector3(ss[n], ss[n+1], ss[n+2]));
-          // }
-
-
-          console.log("CreateFromConvexHull");
-
-          var sbConfig = clothSoftBody.get_m_cfg();
-          // sbConfig.set_viterations( 10 );
-          // sbConfig.set_piterations( 10 );
-
-          clothSoftBody.setTotalMass( 0.9, false );
-          Ammo.castObject( clothSoftBody, Ammo.btCollisionObject ).getCollisionShape().setMargin( margin * 3 );
-          physicsWorld.addSoftBody( clothSoftBody, 1, -1 );
-          cloth.userData.physicsBody = clothSoftBody;
-          // Disable deactivation
-          clothSoftBody.setActivationState( 4 );
-          // shape.setMargin( margin );
-          console.log("addSoftBody");
-
-        //   cloth.material.materials.forEach(e => {
-        //     e.color.set(0xb0e0e6);
-        //   });
-        //   // threeObject.rotation.set(-Math.PI * 0.5, 0, -Math.PI * 0.5);
-          return cloth;
         }
-      );
+      });
+      // console.log(vertices);
+      shape.setMargin( margin );
+      createRigidBody( human, shape, mass, pos, quat);
     }
 
     function createParalellepiped( sx, sy, sz, mass, pos, quat, material ) {
@@ -641,6 +473,253 @@ class ResultPage extends React.Component {
 
       physicsWorld.addRigidBody( body );
 
+    }
+
+    function createCloth(mass, pos, quat) {
+      // var loader = new THREE.ObjectLoader();
+      //
+      // var object = loader.parse(clothJson);
+      // cloth = object.children[0];
+      // const scale = 0.004;
+      // cloth.scale.set(scale, scale, scale);
+      // cloth.castShadow = true;
+      // cloth.receiveShadow = true;
+      //
+      // cloth.position.copy( new THREE.Vector3(0,0,0) );
+      // cloth.quaternion.copy( new THREE.Quaternion(0,0,0,1) );
+      // cloth.rotation.set(0, 0, -Math.PI);
+      // scene.add( cloth );
+      // return cloth;
+
+
+      // The cloth
+      // Cloth graphic object
+      // instantiate a loader
+      var loader = new THREE.OBJLoader();
+
+      var threeObject;
+// load a resource
+      loader.load(
+        // resource URL
+        'http://127.0.0.1:8000/models/md_fat_cloth/md_fat_cloth_d_scaled.obj',
+        // Function when resource is loaded
+        function ( object ) {
+          // console.log(object);
+          // scene.add( object );
+          cloth = object.children[0];
+          console.log(cloth);
+          // var threeObject = object.children[0];
+          const scale = 0.003;
+          // cloth.scale.set(scale, scale, scale);
+          cloth.castShadow = true;
+          cloth.receiveShadow = true;
+          scene.add( cloth );
+
+          textureLoader.load( "http://127.0.0.1:8000/ammo.js/examples/textures/grid.png", function( texture ) {
+            texture.wrapS = THREE.RepeatWrapping;
+            texture.wrapT = THREE.RepeatWrapping;
+            //texture.repeat.set( clothNumSegmentsZ, clothNumSegmentsY );
+            cloth.material.map = texture;
+            cloth.material.needsUpdate = true;
+          } );
+
+          var clothOnly = cloth.clone();
+          clothOnly.position.set(5, 0, 0);
+          scene.add( clothOnly );
+
+
+          // physicCloth(mass, pos, quat, scale);
+
+          //   cloth.material.materials.forEach(e => {
+          //     e.color.set(0xb0e0e6);
+          //   });
+          //   // threeObject.rotation.set(-Math.PI * 0.5, 0, -Math.PI * 0.5);
+          return cloth;
+        }
+      );
+    }
+
+
+    function physicCloth(mass, pos, quat, scale) {
+      // Cloth physic object
+      //var threeObject = new THREE.Mesh( new THREE.BoxGeometry( sx, sy, sz, 1, 1, 1 ), material );
+      // var shape = new Ammo.btConvexHullShape();
+      // var shape = new Ammo.btBoxShape( new Ammo.btVector3( sx * 0.5, sy * 0.5, sz * 0.5 ) );
+      var vec = new Ammo.btVector3();
+      // var s = new Ammo.btScalar();
+      // console.log(threeObject.geometry.getAttribute('position').array);
+      var vertex =[];
+      var vertices = {};
+      var vs = [];
+      var ss = [];
+      var clothPositions = cloth.geometry.getAttribute('position').array;
+      var i, j, n, p, n2;
+      var g = cloth.geometry;
+      var tmpGeo = new THREE.Geometry().fromBufferGeometry( g );
+      console.log(tmpGeo);
+      tmpGeo.mergeVertices();
+
+      var totalVertices = g.attributes.position.array.length/3;
+      var numVertices = tmpGeo.vertices.length;
+      var numFaces = tmpGeo.faces.length;
+
+
+      g.realVertices = new Float32Array( numVertices * 3 );
+      g.realIndices = new ( numFaces * 3 > 65535 ? Uint32Array : Uint16Array )( numFaces * 3 );
+
+      i = numVertices;
+      while(i--){
+        p = tmpGeo.vertices[ i ];
+        n = i * 3;
+        g.realVertices[ n ] = p.x;
+        g.realVertices[ n + 1 ] = p.y;
+        g.realVertices[ n + 2 ] = p.z;
+      }
+
+      // if(verticesOnly){
+      //   tmpGeo.dispose();
+      //   return g.realVertices;
+      // }
+
+      i = numFaces;
+      while(i--){
+        p = tmpGeo.faces[ i ];
+        n = i * 3;
+        g.realIndices[ n ] = p.a;
+        g.realIndices[ n + 1 ] = p.b;
+        g.realIndices[ n + 2 ] = p.c;
+      }
+
+      tmpGeo.dispose();
+
+      //g.realIndices = g.getIndex();
+      //g.setIndex(g.realIndices);
+
+      // if(facesOnly){
+      //   var faces = [];
+      //   i = g.realIndices.length;
+      //   while(i--){
+      //     n = i * 3;
+      //     p = g.realIndices[i]*3;
+      //     faces[n] = g.realVertices[ p ];
+      //     faces[n+1] = g.realVertices[ p+1 ];
+      //     faces[n+2] = g.realVertices[ p+2 ];
+      //   }
+      //   return faces;
+      // }
+
+      // find same point
+      var ar = [];
+      var pos = g.attributes.position.array;
+      i = numVertices;
+      while(i--){
+        n = i*3;
+        ar[i] = [];
+        j = totalVertices;
+        while(j--){
+          n2 = j*3;
+          if( pos[n2] == g.realVertices[n] && pos[n2+1] == g.realVertices[n+1] && pos[n2+2] == g.realVertices[n+2] ) ar[i].push(j);
+        }
+      }
+
+      // generate same point index
+      var pPoint = new ( numVertices > 65535 ? Uint32Array : Uint16Array )( numVertices );
+      var lPoint = new ( totalVertices > 65535 ? Uint32Array : Uint16Array )( totalVertices );
+
+      p = 0;
+      for(i=0; i<numVertices; i++){
+        n = ar[i].length;
+        pPoint[i] = p;
+        j = n;
+        while(j--){ lPoint[p+j] = ar[i][j]; }
+        p += n;
+      }
+
+      g.numFaces = numFaces;
+      g.numVertices = numVertices;
+      g.maxi = totalVertices;
+      g.pPoint = pPoint;
+      g.lPoint = lPoint;
+
+
+      // var is = [];
+      // clothPositions.forEach((e, index) => {
+      //   ss.push(e);
+      //   if(index%3 === 0) {
+      //     vertex = [];
+      //     vertex.push(e);
+      //     is.push(index/3);
+      //   } else if(index%3 === 1) {
+      //     vertex.push(e);
+      //   } else if(index%3 === 2) {
+      //     vertex.push(e);
+      //     var x = vertex[0], y = vertex[1], z = vertex[2];
+      //     vec.setValue(x*scale, y*scale, z*scale);
+      //     vs.push(vec);
+      //   }
+      // });
+      // console.log("vs");
+      // // console.log(vs.length);
+      // // console.log(vertices);
+      //
+      var softBodyHelpers = new Ammo.btSoftBodyHelpers();
+      // var clothSoftBody = softBodyHelpers.CreateFromConvexHull( physicsWorld.getWorldInfo(), vs, vs.length, true );
+
+      var clothSoftBody = softBodyHelpers.CreateFromTriMesh( physicsWorld.getWorldInfo(), g.realVertices, g.realIndices, g.numFaces, true );
+
+      // // force nodes
+      // var i = vs.length, n;
+      // while(i--){
+      //   n = i*3;
+      //   clothSoftBody.get_m_nodes().at( i ).set_m_x( vs[i] );
+      //   // clothSoftBody.get_m_nodes().at( i ).set_m_x(new Ammo.btVector3(ss[n], ss[n+1], ss[n+2]));
+      // }
+
+
+      console.log("CreateFromConvexHull");
+
+      var sbConfig = clothSoftBody.get_m_cfg();
+      // sbConfig.set_viterations( 10 );
+      // sbConfig.set_piterations( 10 );
+      // sbConfig.set_citerations( 1 );
+      // sbConfig.set_diterations( 0 );
+
+      // sbConfig.set_collisions( 0x11 );
+
+      // Friction
+      // sbConfig.set_kDF(0.01);
+      // // Damping
+      // sbConfig.set_kDP(1);
+      // // Pressure
+      // sbConfig.set_kPR(1);
+
+      // sbConfig.set_kVC(1);
+      // sbConfig.set_kMT(1);
+      // sbConfig.set_kCHR(1);
+      sbConfig.set_kKHR(1);
+      // sbConfig.set_kSHR(1);
+      sbConfig.set_kAHR(1);
+
+
+      // Stiffness
+      // clothSoftBody.get_m_materials().at(0).set_m_kLST(1);
+      // clothSoftBody.get_m_materials().at(0).set_m_kAST(1);
+      // clothSoftBody.get_m_materials().at(0).set_m_kVST(o.kvst);
+
+
+      clothSoftBody.setTotalMass( mass, false );
+      Ammo.castObject( clothSoftBody, Ammo.btCollisionObject ).getCollisionShape().setMargin( 0 );
+      physicsWorld.addSoftBody( clothSoftBody, 1, -1 );
+      cloth.userData.physicsBody = clothSoftBody;
+      // Disable deactivation
+      clothSoftBody.setActivationState( 4 );
+      // shape.setMargin( margin );
+      console.log("addSoftBody");
+
+      // Glue the cloth to the body
+      // var influence = 0.5;
+      // clothSoftBody.appendAnchor( 0, human.userData.physicsBody, false, influence );
+      // clothSoftBody.appendAnchor( 0, human.userData.physicsBody, false, influence );
     }
 
     function createRandomColor() {
@@ -699,7 +778,7 @@ class ResultPage extends React.Component {
 
       var deltaTime = clock.getDelta();
 
-      updatePhysics( deltaTime );
+      // updatePhysics( deltaTime );
 
       controls.update( deltaTime );
 
@@ -714,58 +793,104 @@ class ResultPage extends React.Component {
 
       // Hinge control
       // hinge.enableAngularMotor( true, 0.8 * armMovement, 50 );
-      // console.log("before stepworld");
+
       // Step world
       physicsWorld.stepSimulation( deltaTime, 10 );
-      // console.log("after stepworld");
+
 
       // Update cloth
       if(cloth) {
         var softBody = cloth.userData.physicsBody;
         var clothPositions = cloth.geometry.attributes.position.array;
-        // console.log(cloth.geometry.getAttribute('position').array);
-        // console.log(clothPositions);
-        var tmpGeo = new THREE.Geometry().fromBufferGeometry( cloth.geometry );
-        // console.log(tmpGeo);
-        tmpGeo.mergeVertices();
-        // var totalVertices = cloth.geometry.attributes.position.array.length/3;
-        var numVertices = tmpGeo.vertices.length;
-
-
-        var numVerts = clothPositions.length / 3;
-        // var numVerts = numVertices;
-        var nodes = softBody.get_m_nodes();
-        var indexFloat = 0;
-        for ( var i = 0; i < numVerts; i ++ ) {
-
-          var node = nodes.at( i );
-          var nodePos = node.get_m_x();
-          clothPositions[ indexFloat++ ] = nodePos.x();
-          clothPositions[ indexFloat++ ] = nodePos.y();
-          clothPositions[ indexFloat++ ] = nodePos.z();
+        //////////////////////////////////////////
+        var n, c, cc, p, j, k;
+        var max = cloth.geometry.numVertices;
+        var maxi = cloth.geometry.maxi;
+        var pPoint = cloth.geometry.pPoint;
+        var lPoint = cloth.geometry.lPoint;
+        var softPoints = 0;
+        var Sr = [];
+        var s = softBody.get_m_nodes(); // get vertrices list
+        j = s.size();
+        var pos;
+        while(j--){
+          n = (j*3) + softPoints;
+          pos = s.at( j ).get_m_x();
+          Sr[n] = pos.x();
+          Sr[n+1] = pos.y();
+          Sr[n+2] = pos.z();
         }
-        // console.log(nx, ny, nx, nx+ny+nz);
+
+        j = max;
+        while(j--){
+          n = (j*3) + softPoints;
+          if( j == max-1 ) k = maxi - pPoint[j];
+          else k = pPoint[j+1] - pPoint[j];
+          var d = pPoint[j];
+          while(k--){
+            var id = lPoint[d+k]*3;
+            clothPositions[id] = Sr[n];
+            clothPositions[id+1] = Sr[n+1];
+            clothPositions[id+2] = Sr[n+2];
+          }
+        }
         cloth.geometry.computeVertexNormals();
         cloth.geometry.attributes.position.needsUpdate = true;
-        cloth.geometry.attributes.normal.needsUpdate = true;
-      }
+        var norm = cloth.geometry.attributes.normal.array;
 
-
-      // Update rigid bodies
-      for ( var i = 0, il = rigidBodies.length; i < il; i++ ) {
-        var objThree = rigidBodies[ i ];
-        var objPhys = objThree.userData.physicsBody;
-        var ms = objPhys.getMotionState();
-        if ( ms ) {
-
-          ms.getWorldTransform( transformAux1 );
-          var p = transformAux1.getOrigin();
-          var q = transformAux1.getRotation();
-          objThree.position.set( p.x(), p.y(), p.z() );
-          objThree.quaternion.set( q.x(), q.y(), q.z(), q.w() );
-
+        j = max;
+        while(j--){
+          if( j == max-1 ) k = maxi - pPoint[j];
+          else k = pPoint[j+1] - pPoint[j];
+          var d = pPoint[j];
+          var ref = lPoint[d]*3;
+          while(k--){
+            var id = lPoint[d+k]*3;
+            norm[id] = norm[ref];
+            norm[id+1] = norm[ref+1];
+            norm[id+2] = norm[ref+2];
+          }
         }
+        cloth.geometry.attributes.normal.needsUpdate = true;
+        cloth.geometry.computeBoundingSphere();
       }
+
+      //////////////////////////////////////////////////
+      // var softBody2 = cloth2.userData.physicsBody;
+      // var clothPositions2 = cloth2.geometry.attributes.position.array;
+      // var numVerts = clothPositions2.length / 3;
+      // // var numVerts = numVertices;
+      // var nodes = softBody2.get_m_nodes();
+      // var indexFloat = 0;
+      // for ( var i = 0; i < numVerts; i ++ ) {
+      //
+      //   var node = nodes.at( i );
+      //   var nodePos = node.get_m_x();
+      //   clothPositions2[ indexFloat++ ] = nodePos.x();
+      //   clothPositions2[ indexFloat++ ] = nodePos.y();
+      //   clothPositions2[ indexFloat++ ] = nodePos.z();
+      // }
+      // // console.log(nx, ny, nx, nx+ny+nz);
+      // cloth2.geometry.computeVertexNormals();
+      // cloth2.geometry.attributes.position.needsUpdate = true;
+      // cloth2.geometry.attributes.normal.needsUpdate = true;
+      //
+      // Update rigid bodies
+      // for ( var i = 0, il = rigidBodies.length; i < il; i++ ) {
+      //   var objThree = rigidBodies[ i ];
+      //   var objPhys = objThree.userData.physicsBody;
+      //   var ms = objPhys.getMotionState();
+      //   if ( ms ) {
+      //
+      //     ms.getWorldTransform( transformAux1 );
+      //     var p = transformAux1.getOrigin();
+      //     var q = transformAux1.getRotation();
+      //     objThree.position.set( p.x(), p.y(), p.z() );
+      //     objThree.quaternion.set( q.x(), q.y(), q.z(), q.w() );
+      //
+      //   }
+      // }
+
 
     }
   }

@@ -25,9 +25,9 @@ class MarkPage extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      URL1: 'http://0.0.0.0:5000/' + 'user1' + '/img1.jpg',
-      URL2: 'http://0.0.0.0:5000/' + 'user1' + '/img2.jpg',
-      URL3: 'http://0.0.0.0:5000/' + 'user1' + '/img3.jpg',
+      URL1: 'http://0.0.0.0:5500/' + 'user1' + '/img1.jpg',
+      URL2: 'http://0.0.0.0:5500/' + 'user1' + '/img2.jpg',
+      // URL3: 'http://0.0.0.0:5000/' + 'user1' + '/img3.jpg',
       url: 'http://0.0.0.0:5000/' + 'user1' + '/*',
       resultsURL: 'http://0.0.0.0:5000/results/' + 'user1',
       // URL1: 'http://0.0.0.0:5000/' + this.props.params.username + '/img1.jpg',
@@ -50,9 +50,6 @@ class MarkPage extends Component {
         </TabPane>
         <TabPane tab="Image2" key="2" className={styles.tab}>
           <Mark URL={this.state.URL2} tab={"2"} url={this.state.url} resultsURL={this.state.resultsURL}/>
-        </TabPane>
-        <TabPane tab="Image3" key="3" className={styles.tab}>
-          <Mark URL={this.state.URL3} tab={"3"} url={this.state.url} resultsURL={this.state.resultsURL}/>
         </TabPane>
       </Tabs>
     );
@@ -216,6 +213,7 @@ var Mark = React.createClass({
               console.log("Error!!!");
             } else {
               console.log(res);
+              alert(res);
               this.push();
             }
           });

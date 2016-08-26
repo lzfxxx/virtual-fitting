@@ -143,7 +143,7 @@ class Results(Resource):
     LS1 = user_info.get("LS1")
     RS1 = user_info.get("RS1")
     eng = matlab.engine.start_matlab()
-    ret = eng.calculation(LS1, RS1)
+    ret = eng.main('IMG_6708.JPG', 'IMG_6710.JPG', 177, [[1,2],[3,4]], [[5,6],[7,8]], [9,10], [[11,12],[13,14]], [[15,16],[17,18]], [[19,20],[21,22]], [23,24]);
     eng.quit()
     print(ret)
     return ret
