@@ -1,0 +1,74 @@
+newmtl h185_c91_w71_m:M_body
+illum 4
+Kd 0.00 0.00 0.00
+Ka 0.00 0.00 0.00
+Tf 1.00 1.00 1.00
+map_Kd M_body_east_underwear.jpg
+map_Ka M_body_east_underwear.jpg
+Ni 1.00
+Ks 0.03 0.03 0.03
+Ns 10.00
+newmtl h185_c91_w71_m:M_eye
+illum 4
+Kd 0.00 0.00 0.00
+Ka 0.00 0.00 0.00
+Tf 1.00 1.00 1.00
+map_Kd M_eye.jpg
+map_Ka M_eye.jpg
+Ni 1.00
+Ks 0.00 0.00 0.00
+Ns 100.00
+newmtl h185_c91_w71_m:M_eye_specular_Light
+illum 4
+Kd 1.00 1.00 1.00
+Ka 0.00 0.00 0.00
+Tf 1.00 1.00 1.00
+Ni 1.00
+Ks 1.00 1.00 1.00
+Ns 2.00
+newmtl h185_c91_w71_m:M_eyelashes
+illum 4
+Kd 0.03 0.00 0.01
+Ka 0.00 0.00 0.00
+Tf 1.00 1.00 1.00
+Ni 1.00
+Ks 0.00 0.00 0.00
+Ns 5.00
+newmtl h185_c91_w71_m:M_face
+illum 4
+Kd 0.00 0.00 0.00
+Ka 0.00 0.00 0.00
+Tf 1.00 1.00 1.00
+map_Kd M_face.jpg
+map_Ka M_face.jpg
+Ni 1.00
+Ks 0.02 0.02 0.02
+Ns 10.00
+newmtl h185_c91_w71_m:M_leg_hand
+illum 4
+Kd 0.00 0.00 0.00
+Ka 0.00 0.00 0.00
+Tf 1.00 1.00 1.00
+map_Kd M_leg_hand.jpg
+map_Ka M_leg_hand.jpg
+Ni 1.00
+Ks 0.03 0.03 0.03
+Ns 10.00
+newmtl h185_c91_w71_m:ear_dummy1
+illum 4
+Kd 0.50 0.50 0.50
+Ka 0.00 0.00 0.00
+Tf 1.00 1.00 1.00
+Ni 1.00
+Ks 0.00 0.00 0.00
+Ns 2.00
+newmtl h185_c91_w71_m:man_base_V0_1_2_M_hair
+illum 4
+Kd 0.00 0.00 0.00
+Ka 0.00 0.00 0.00
+Tf 1.00 1.00 1.00
+map_Kd M_hair.png
+map_Ka M_hair.png
+Ni 1.00
+Ks 0.20 0.20 0.20
+Ns 40.00

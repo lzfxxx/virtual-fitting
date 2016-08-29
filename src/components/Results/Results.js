@@ -8,15 +8,16 @@ import Global from '../../services/Global';
 import JsonObj from './standard-male-figure.json';
 import clothJson from './shirt.json';
 
+const heightSetting = 180;
+const chestSetting = 100;
+const waistSetting = 90;
+
 class ResultPage extends React.Component {
 
   constructor(props) {
     super(props);
     this.state = {
     };
-    this.height = 170;
-    this.chest = 90;
-    this.waist = 90;
   }
 
   componentDidMount() {
@@ -334,7 +335,7 @@ class ResultPage extends React.Component {
       // instantiate a loader
       var loader = new THREE.OBJLoader();
       var scale = 1;
-      scale = this.height/Global.mheight;
+      scale = heightSetting/Global.mheight;
       var waist = Global.mwaist*scale;
       var chest = Global.mchest*scale;
       var humanDiffWaist;
@@ -387,15 +388,23 @@ class ResultPage extends React.Component {
                   var a1 = human.geometry.attributes.position.array;
                   var a2 = humanDiffWaist.geometry.attributes.position.array;
                   var a3 = humanDiffChest.geometry.attributes.position.array;
+                  // var a1copy1 = a1.slice();
+                  // var a1copy2 = a1.slice();
                   for(var i = 0; i < a1.length; i++) {
                     var a1s = a1[i] * scale;
-                    var a2s = a2[i] * scale;
-                    a1s[i] = a1s[i] + ((a2s[i] - a1s[i]) / (90 - 71)) * (waist - 71);
+                    // var a2s = a2[i] * scale;
+                    // var a3s = a3[i] * scale;
+                    var WaistDiff;
+                    var ChestDiff;
+                    WaistDiff = ((a2[i] - a1[i]) / (90 - 71)) * (waistSetting - waist);
+                    ChestDiff = ((a3[i] - a1[i]) / (100 - 91)) * (chestSetting - chest);
+                    a1[i] = a1s + WaistDiff + ChestDiff;
                   }
 
                   console.log("calculated");
+                  // console.log(a1);
 
-                  human.scale.set(scale, scale, scale);
+                  // human.scale.set(scale, scale, scale);
                   human.castShadow = true;
                   human.receiveShadow = true;
                   scene.add( human );
