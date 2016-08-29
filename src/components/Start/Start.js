@@ -53,7 +53,7 @@ class StartPage extends Component {
           <p className={styles.desc}>Description</p>
           <p className={styles.desc}>DescriptionDescriptionDescriptionDescription</p>
           <p className={styles.desc}>DescriptionDescriptionDescriptionDescriptionDescriptionDescriptionDescriptionDescription</p>
-          <Link to={`/upload/${window.u}`}><Button type="primary" style={{ marginTop: 5 }}>Getting Started</Button></Link>
+          <Link to={`/upload_${window.u}`}><Button type="primary" style={{ marginTop: 5 }}>Getting Started</Button></Link>
         </div>
       </div>
     );

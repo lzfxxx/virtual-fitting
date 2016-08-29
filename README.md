@@ -1,4 +1,4 @@
-# antd-demo
+# virtual-fitting
 
 ## Environment
 
@@ -12,9 +12,25 @@ https://github.com/airbnb/javascript
 
 ## Develop
 
-```
-npm run dev
-```
+1. ```
+   cd assets/ && python simple-cors-http-server.py
+   ```
+
+2. ```
+   npm start
+   ```
+
+3. ```
+   python api.py
+   ```
+
+4. ```
+   python imgdb.py
+   ```
+
+5. ```
+   mongod
+   ```
 
 visit http://127.0.0.1:8989
 

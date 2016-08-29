@@ -56,10 +56,10 @@ class CropperPage extends Component {
 
     return (
       <Tabs defaultActiveKey="1" onChange={callback}>
-        <TabPane tab="Image1" key="1" className={styles.tab}>
+        <TabPane tab="Front Photo" key="1" className={styles.tab}>
           <MyCropper URL={this.state.URL1}/>
         </TabPane>
-        <TabPane tab="Image2" key="2" className={styles.tab}>
+        <TabPane tab="Side Photo" key="2" className={styles.tab}>
           <MyCropper URL={this.state.URL2}/>
         </TabPane>
       </Tabs>

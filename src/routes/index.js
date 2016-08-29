@@ -27,7 +27,7 @@ const Routes = ({ history }) =>
       <Route path="2" component={NotFound} />
       <Route path="3" component={NotFound} />
       <Route path="4" component={NotFound} />
-      <Route path="*" component={NotFound}/>
+      <Route path="*" component={NotFound} />
     </Route>
   </Router>;
 

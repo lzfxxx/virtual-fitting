@@ -4,6 +4,7 @@ require('babel-polyfill');
 import React from 'react';
 import ReactDOM from 'react-dom';
 
+import Global from '../../services/Global';
 import JsonObj from './standard-male-figure.json';
 import clothJson from './shirt.json';
 
@@ -13,6 +14,9 @@ class ResultPage extends React.Component {
     super(props);
     this.state = {
     };
+    this.height = 170;
+    this.chest = 90;
+    this.waist = 90;
   }
 
   componentDidMount() {
@@ -329,9 +333,12 @@ class ResultPage extends React.Component {
       // The body
       // instantiate a loader
       var loader = new THREE.OBJLoader();
-      const scale = 1;
-      var waist = 90;
-
+      var scale = 1;
+      scale = this.height/Global.mheight;
+      var waist = Global.mwaist*scale;
+      var chest = Global.mchest*scale;
+      var humanDiffWaist;
+      var humanDiffChest;
 // load a resource
       loader.load(
         // resource URL
@@ -342,58 +349,73 @@ class ResultPage extends React.Component {
           human = object.children[0];
           console.log(human);
 
-          human.scale.set(scale, scale, scale);
-          human.castShadow = true;
-          human.receiveShadow = true;
-          scene.add( human );
-          human.material.materials.forEach(e => {
-            e.color.set(0xffe0bd);
-          });
-          var bodyOnly = human.clone();
-          bodyOnly.position.set(-5, 0, 0);
-          scene.add( bodyOnly );
+          // human.scale.set(scale, scale, scale);
+          // human.castShadow = true;
+          // human.receiveShadow = true;
+          // scene.add( human );
+          // human.material.materials.forEach(e => {
+          //   e.color.set(0xffe0bd);
+          // });
+          //
+          // var bodyOnly = human.clone();
+          // bodyOnly.position.set(-5, 0, 0);
+          // scene.add( bodyOnly );
+          //
+          // // physicHuman(mass, pos, quat, scale);
+          //
+          // // threeObject.rotation.set(-Math.PI * 0.5, 0, -Math.PI * 0.5);
+          // return human;
 
-          // physicHuman(mass, pos, quat, scale);
+          loader.load(
+            // resource URL
+            'http://127.0.0.1:8000/models/h170_c91_w90_m/h170_c91_w90_m_scaled.obj',
+            // Function when resource is loaded
+            function ( object ) {
+              humanDiffWaist = object.children[0];
+              console.log(humanDiffWaist);
 
-          // threeObject.rotation.set(-Math.PI * 0.5, 0, -Math.PI * 0.5);
-          return human;
+              loader.load(
+                // resource URL
+                'http://127.0.0.1:8000/models/h170_c100_w71_m/h170_c100_w71_m_scaled.obj',
+                // Function when resource is loaded
+                function ( object ) {
+                  humanDiffChest = object.children[0];
+                  console.log(humanDiffChest);
 
-          // var human2;
-          // loader.load(
-          //   // resource URL
-          //   'http://127.0.0.1:8000/models/h170_c91_w90_m/h170_c91_w90_m_scaled.obj',
-          //   // Function when resource is loaded
-          //   function ( object ) {
-          //     human2 = object.children[0];
-          //     console.log(human2);
-          //     // var threeObject = object.children[0];
-          //     var a1 = human.geometry.attributes.position.array;
-          //     var a2 = human2.geometry.attributes.position.array;
-          //     for(var i = 0; i < a1.length; i++) {
-          //       a1[i] = a1[i] + ((a2[i] - a1[i]) / (90 - 71)) * (waist - 71);
-          //     }
-          //
-          //     console.log("calculated");
-          //
-          //     human.scale.set(scale, scale, scale);
-          //     human.castShadow = true;
-          //     human.receiveShadow = true;
-          //     scene.add( human );
-          //     human.material.materials.forEach(e => {
-          //       e.color.set(0xffe0bd);
-          //     });
-          //
-          //
-          //     // physicHuman(mass, pos, quat, scale);
-          //
-          //     // threeObject.rotation.set(-Math.PI * 0.5, 0, -Math.PI * 0.5);
-          //     return human;
-          //
-          //   }
-          // );
 
-        }
-      );
+                  // var threeObject = object.children[0];
+                  var a1 = human.geometry.attributes.position.array;
+                  var a2 = humanDiffWaist.geometry.attributes.position.array;
+                  var a3 = humanDiffChest.geometry.attributes.position.array;
+                  for(var i = 0; i < a1.length; i++) {
+                    var a1s = a1[i] * scale;
+                    var a2s = a2[i] * scale;
+                    a1s[i] = a1s[i] + ((a2s[i] - a1s[i]) / (90 - 71)) * (waist - 71);
+                  }
+
+                  console.log("calculated");
+
+                  human.scale.set(scale, scale, scale);
+                  human.castShadow = true;
+                  human.receiveShadow = true;
+                  scene.add( human );
+                  human.material.materials.forEach(e => {
+                    e.color.set(0xffe0bd);
+                  });
+
+                  var bodyOnly = human.clone();
+                  bodyOnly.position.set(-5, 0, 0);
+                  scene.add( bodyOnly );
+
+                  // physicHuman(mass, pos, quat, scale);
+
+                  // threeObject.rotation.set(-Math.PI * 0.5, 0, -Math.PI * 0.5);
+                  return human;
+
+
+                });
+            });
+        });
 
 
     }

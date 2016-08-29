@@ -11,7 +11,7 @@ import {
   Input,
 } from 'antd';
 const SubMenu = Menu.SubMenu;
-import styles from  './StartPage.less';
+import styles from './StartPage.less';
 import Login from '../Login/Login';
 import Signup from '../Signup/Signup';
 
@@ -62,7 +62,7 @@ class Sider extends Component {
 
 
   renderHeader() {
-    return(
+    return (
       <div className={styles.header}>
         <Row type="flex" justify="space-around" align="middle"
              className={styles.row}>
@@ -80,11 +80,11 @@ class Sider extends Component {
                    title="Login" onOk={() => this.handleOk()} onCancel={() => this.handleCancel()}
                    footer={[
 
-      <font size="2" color="darkgrey">Don't have a account?  </font>,
-    <Button key="back" type="ghost" size="large" onClick={() => this.showSign()}>Sign up</Button>,
+                     <font size="2" color="darkgrey">Don't have a account?  </font>,
+                     <Button key="back" type="ghost" size="large" onClick={() => this.showSign()}>Sign up</Button>,
 
 
-  ]}
+                   ]}
             >
               <Login />
             </Modal>
@@ -93,9 +93,9 @@ class Sider extends Component {
                    title="Sign up" onOk={() => this.handleOk()} onCancel={() => this.handleCancel()}
                    footer={[
 
-      <Button key="back" type="ghost" size="large" onClick={() => this.handleCancel()}>Cancel</Button>,
+                     <Button key="back" type="ghost" size="large" onClick={() => this.handleCancel()}>Cancel</Button>,
 
-  ]}
+                   ]}
             >
               <Signup />
             </Modal>

@@ -3,8 +3,9 @@ import { message, Upload, Icon, Modal, Button } from 'antd';
 import styles from './Upload.less';
 import request from 'superagent';
 
-const img1 = 'http://0.0.0.0:5500/admin/example1.jpg'+'?t='+new Date().getTime();
-const img2 = 'http://0.0.0.0:5500/admin/example2.jpg'+'?t='+new Date().getTime();
+const img1 = 'http://0.0.0.0:5500/admin/example2.jpg'+'?t='+new Date().getTime();
+const img2 = 'http://0.0.0.0:5500/admin/example1.jpg'+'?t='+new Date().getTime();
+
 // const img3 = 'http://0.0.0.0:5500/admin/example3.jpg'+'?t='+new Date().getTime();
 
 // const URL1 = 'http://0.0.0.0:5000/' + window.u + '/img1.jpg';
@@ -24,19 +25,20 @@ class UploadPage extends Component {
       URL2: 'http://0.0.0.0:5500/' + this.props.params.username + '/img2.jpg',
       // URL3: 'http://0.0.0.0:5500/' + this.props.params.username + '/img3.jpg'
     };
+    window.key = '2';
   }
 
   render() {
     return (
       <div className={styles.container}>
-        <ImageUploadList image={img2} URL={this.state.URL1} text={'Upload your front photo'} border={1}/>
-        <ImageUploadList image={img1} URL={this.state.URL2} text={'Upload your side photo'}  border={1}/>
+        <ImageUpload image={img1} URL={this.state.URL1} text={'Upload your front photo'} border={1}/>
+        <ImageUpload image={img2} URL={this.state.URL2} text={'Upload your side photo'}  border={1}/>
       </div>
     );
   }
 }
 
-class ImageUploadList extends Component {
+class ImageUpload extends Component {
 
   constructor(props) {
     super(props);
@@ -44,7 +46,13 @@ class ImageUploadList extends Component {
     this.state = {
       priviewImage: this.props.image,
       iconLoading: false,
-      isImg: "unknown"
+      isImg: "unknown",
+      fileList: [{
+        uid: -1,
+        name: 'xxx.png',
+        status: 'done',
+        url: 'http://www.baidu.com/xxx.png',
+      }]
     };
   }
 
@@ -71,8 +79,8 @@ class ImageUploadList extends Component {
           });
           //console.log(res.text);
         }
+        setTimeout(this.hide, 0);
       });
-    setTimeout(this.hide, 0);
   }
 
   getMessage() {
@@ -80,36 +88,45 @@ class ImageUploadList extends Component {
     //   this.hide = message.loading('Loading Images...', 0);
     // }
     if(this.state.isImg === "true") {
-      return
+
     } else if(this.state.isImg === "false") {
-      return "Please upload image"
+      return "Please upload image";
     } else {
       this.hide = message.loading('Loading Images...', 0);
     }
   }
-  enterLoading() {
-    this.setState({ iconLoading: true });
-    this.hide = message.loading('Uploading...', 0);
-  }
   handleChange(info) {
-    if (info.file.status === 'done') {
+    let fileList = info.fileList;
+    if(info.file.status == 'uploading') {
+      if(!this.state.iconLoading) {
+        this.setState({ iconLoading: true });
+        this.hide2 = message.loading('Uploading...', 0);
+        console.log("111");
+      }
+    }
+    if(info.file.status == 'done') {
       this.setState({
         priviewImage: this.props.URL+'?t='+new Date().getTime(),
         iconLoading: false
       }, () => {
-        console.log(this.state.iconLoading);
-        setTimeout(this.hide, 0);
+        // console.log(this.state.iconLoading);
+        setTimeout(this.hide2, 0);
         message.success('Upload Succeed');
       });
-    } else if (info.file.status === 'error') {
-      setTimeout(this.hide, 0);
+    } else if(info.file.status === 'error') {
+      this.setState({
+        iconLoading: false
+      });
+      setTimeout(this.hide2, 0);
       message.error("Upload Failed");
     }
+    this.setState({ fileList });
   }
 
   render() {
+    const { URL } = this.props;
     const props = {
-      action: this.props.URL,
+      action: URL,
       showUploadList: false,
       //listType: 'picture-card',
       onChange: (e) => this.handleChange(e),
@@ -122,7 +139,7 @@ class ImageUploadList extends Component {
         </div>
         <div className={styles.upload}>
           <Upload {...props} fileList={this.state.fileList} >
-            <Button type="ghost"  icon="upload" loading={this.state.iconLoading} onClick={() => this.enterLoading()}>
+            <Button type="ghost"  icon="upload" loading={this.state.iconLoading}>
               {this.props.text}
             </Button>
           </Upload>

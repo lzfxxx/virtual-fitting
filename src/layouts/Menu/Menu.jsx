@@ -11,7 +11,7 @@ import {
   Input,
 } from 'antd';
 const SubMenu = Menu.SubMenu;
-import styles from  './Menu.less';
+import styles from './Menu.less';
 import Login from '../Login/Login';
 import Signup from '../Signup/Signup';
 
@@ -25,9 +25,11 @@ class SiderPage extends Component {
       visible: false,
       signvisible: false,
       login: false,
+      selectedKey: '1',
       username: window.u
     };
     console.log(window.u,window.p);
+    window.key = '1';
   }
 
   showModal() {
@@ -61,6 +63,13 @@ class SiderPage extends Component {
     this.setState({
       current: e.key,
     });
+  }
+
+  changeKey() {
+    console.log("11");
+    if(window.key) {
+      this.setState({selectedKey: window.key});
+    }
   }
 
   render() {
