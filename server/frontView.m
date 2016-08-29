@@ -39,7 +39,7 @@ function front = frontView(path, setting, absH,  rheight, rwaist, rchest)
 
     waist_y = (1 * points(1, 2) + 0.618 * points(2, 2)) / 1.618;
     throat_y = (1 * points(1, 2) + 0.618 * waist_y) / 1.618;
-    chest_y = (0.658 * throat_y + 1 * waist_y) / 1.618;
+    chest_y = (0.668 * throat_y + 1 * waist_y) / 1.618;
     
     shoulder_top_y =  (points(1, 2) + 0.1 * points(2, 2)) / 1;
     shoulder_bot_y =  (points(1, 2) + 0.22 * points(2, 2)) / 1;%for sideways
@@ -52,7 +52,7 @@ function front = frontView(path, setting, absH,  rheight, rwaist, rchest)
 
     %% parameters init
     minW = 20;
-    maxW = 45;
+    maxW = 50;
     minC = 20;
     maxC = 50;
     relH = norm(points(2, :) - points(1, :));%top-bottom

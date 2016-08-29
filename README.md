@@ -12,26 +12,23 @@ https://github.com/airbnb/javascript
 
 ## Develop
 
-1. ```
-   cd assets/ && python simple-cors-http-server.py
-   ```
+Run following commands in separate terminal window under project root folder
 
-2. ```
-   npm start
-   ```
-
-3. ```
-   python api.py
-   ```
-
-4. ```
-   python imgdb.py
-   ```
-
-5. ```
-   mongod
-   ```
-
+```
+cd assets/ && python simple-cors-http-server.py
+```
+```
+npm start
+```
+```
+python api.py
+```
+```
+python imgdb.py
+```
+```
+mongod
+```
 visit http://127.0.0.1:8989
 
 ## Build

@@ -58,7 +58,7 @@ function sideways = sideView(path, setting, absH, rheight, rwaist, rtoe, rchest_
 
     %% parameters init
     minW = 20;
-    maxW = 45;
+    maxW = 50;
     minC = 20;
     maxC = 50;
     relH = norm(points(2, :) - points(1, :));%top-bottom
