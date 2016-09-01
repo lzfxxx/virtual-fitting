@@ -24,6 +24,7 @@
     "rc-menu": "^4.12.3",
     "react": "^15.2.1",
     "react-addons-pure-render-mixin": "^15.2.1",
+    "react-cookie": "^0.4.8",
     "react-cropper": "^0.8.0",
     "react-dom": "^15.2.1",
     "react-radio-group": "^3.0.1",

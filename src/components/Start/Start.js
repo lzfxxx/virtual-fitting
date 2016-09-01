@@ -4,9 +4,20 @@ import { Router, Route, IndexRoute, Link } from 'react-router';
 import styles from './Start.less';
 require('es6-promise').polyfill();
 import fetch from 'isomorphic-fetch';
+import cookie from 'react-cookie';
 
 
 const URL = 'http://127.0.0.1:5000/api';
+function getUsername() {
+  if(window.u) {
+    return window.u;
+  }
+  if(cookie.load('username')) {
+    return cookie.load('username');
+  }
+}
+
+const username = getUsername();
 
 class StartPage extends Component {
 
@@ -18,6 +29,8 @@ class StartPage extends Component {
     };
     //window.u = this.props.params.userId;
     console.log(window.u);
+    console.log("username", username);
+
   }
 
   componentDidMount() {
@@ -53,7 +66,7 @@ class StartPage extends Component {
           <p className={styles.desc}>Description</p>
           <p className={styles.desc}>DescriptionDescriptionDescriptionDescription</p>
           <p className={styles.desc}>DescriptionDescriptionDescriptionDescriptionDescriptionDescriptionDescriptionDescription</p>
-          <Link to={`/upload_${window.u}`}><Button type="primary" style={{ marginTop: 5 }}>Getting Started</Button></Link>
+          <Link to={`/upload_${username}`}><Button type="primary" style={{ marginTop: 5 }}>Getting Started</Button></Link>
         </div>
       </div>
     );

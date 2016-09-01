@@ -2,6 +2,7 @@ import React, { Component, PropTypes } from 'react';
 import { message, Upload, Icon, Modal, Button } from 'antd';
 import styles from './Upload.less';
 import request from 'superagent';
+import cookie from 'react-cookie';
 
 const img1 = 'http://0.0.0.0:5500/admin/example2.jpg'+'?t='+new Date().getTime();
 const img2 = 'http://0.0.0.0:5500/admin/example1.jpg'+'?t='+new Date().getTime();
@@ -16,13 +17,23 @@ const img2 = 'http://0.0.0.0:5500/admin/example1.jpg'+'?t='+new Date().getTime()
 // const URL2 = 'http://0.0.0.0:5000/' + 'user1' + '/img2.jpg';
 // const URL3 = 'http://0.0.0.0:5000/' + 'user1' + '/img3.jpg';
 
+function getUsername() {
+  if(window.u) {
+    return window.u;
+  }
+  if(cookie.load('username')) {
+    return cookie.load('username');
+  }
+}
+
+const username = getUsername();
 
 class UploadPage extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      URL1: 'http://0.0.0.0:5500/' + this.props.params.username + '/img1.jpg',
-      URL2: 'http://0.0.0.0:5500/' + this.props.params.username + '/img2.jpg',
+      URL1: 'http://0.0.0.0:5500/' + username + '/img1.jpg',
+      URL2: 'http://0.0.0.0:5500/' + username + '/img2.jpg',
       // URL3: 'http://0.0.0.0:5500/' + this.props.params.username + '/img3.jpg'
     };
     window.key = '2';

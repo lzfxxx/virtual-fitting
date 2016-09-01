@@ -4,6 +4,8 @@ import styles from './Adjust.less';
 import 'cropperjs/dist/cropper.css';
 import { Icon, Modal, Button, Tabs,message} from 'antd';
 import request from 'superagent';
+import cookie from 'react-cookie';
+
 //import fs from 'fs';
 
 const TabPane = Tabs.TabPane;
@@ -15,6 +17,17 @@ const TabPane = Tabs.TabPane;
 // const URL1 = 'http://0.0.0.0:5000/' + 'user1' + '/img1.jpg';
 // const URL2 = 'http://0.0.0.0:5000/' + 'user1' + '/img2.jpg';
 // const URL3 = 'http://0.0.0.0:5000/' + 'user1' + '/img3.jpg';
+function getUsername() {
+  if(window.u) {
+    return window.u;
+  }
+  if(cookie.load('username')) {
+    return cookie.load('username');
+  }
+}
+
+const username = getUsername();
+
 
 function base64ToBlob(base64, mime)
 {
@@ -43,8 +56,8 @@ class CropperPage extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      URL1: 'http://0.0.0.0:5500/' + this.props.params.username + '/img1.jpg',
-      URL2: 'http://0.0.0.0:5500/' + this.props.params.username + '/img2.jpg',
+      URL1: 'http://0.0.0.0:5500/' + username + '/img1.jpg',
+      URL2: 'http://0.0.0.0:5500/' + username + '/img2.jpg',
       // URL3: 'http://0.0.0.0:5000/' + this.props.params.username + '/img3.jpg'
     };
   }

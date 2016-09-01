@@ -14,6 +14,19 @@ const SubMenu = Menu.SubMenu;
 import styles from './Menu.less';
 import Login from '../Login/Login';
 import Signup from '../Signup/Signup';
+import cookie from 'react-cookie';
+
+function getUsername() {
+  if(window.u) {
+    return window.u;
+  }
+  if(cookie.load('username')) {
+    return cookie.load('username');
+  }
+}
+
+const username = getUsername();
+
 
 class SiderPage extends Component {
 
@@ -33,6 +46,10 @@ class SiderPage extends Component {
   }
 
   showModal() {
+    cookie.remove('username');
+
+    /** Clear all cookies starting with 'session' (to get all cookies, omit regex argument) */
+    Object.keys(cookie.select(/^session.*/i)).forEach(name => cookie.remove(name));
     browserHistory.push('/index');
     this.setState({
       visible: true,
@@ -92,16 +109,16 @@ class SiderPage extends Component {
                 <Link to="/">1. Get Started</Link><br />
               </Menu.Item>
               <Menu.Item key="2">
-                <Link to={`/upload_${this.state.username}`}>2. Upload Photos</Link><br />
+                <Link to={`/upload_${username}`}>2. Upload Photos</Link><br />
               </Menu.Item>
               <Menu.Item key="3">
-                <Link to={`/adjust_${this.state.username}`}>3. Adjust Photos</Link><br />
+                <Link to={`/adjust_${username}`}>3. Adjust Photos</Link><br />
               </Menu.Item>
               <Menu.Item key="4">
-                <Link to={`/mark_${this.state.username}`}>4. Mark Key Points</Link><br />
+                <Link to={`/mark_${username}`}>4. Mark Key Points</Link><br />
               </Menu.Item>
               <Menu.Item key="5">
-                <Link to={`/results_${this.state.username}`}>5. Results</Link>
+                <Link to={`/results_${username}`}>5. Results</Link>
               </Menu.Item>
             </SubMenu>
             <SubMenu key="sub2" title={<span><Icon type="user" /><Link to="/other">Other</Link></span>}>
@@ -127,7 +144,7 @@ class SiderPage extends Component {
               <Col span={6}> </Col>
               <Col span={6}> </Col>
               <Col span={6} className={styles.col}>
-                <p style={{fontSize: 'large'}}>Welcome! {window.u} &nbsp;</p>
+                <p style={{fontSize: 'large'}}>Welcome! {username} &nbsp;</p>
                 <Button type="ghost" icon="logout" onClick={() => this.showModal()}>
                   Logout
                 </Button>

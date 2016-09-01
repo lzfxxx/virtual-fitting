@@ -3,6 +3,7 @@ import { Router, Route, IndexRoute, Link, browserHistory } from 'react-router';
 import { Form, Input, Button, Checkbox } from 'antd';
 import request from 'superagent';
 // let jsonp = require('superagent-jsonp');
+import cookie from 'react-cookie';
 
 const FormItem = Form.Item;
 let Login = React.createClass({
@@ -10,7 +11,12 @@ let Login = React.createClass({
     return {
       logged: false,
       error: false,
+      username: cookie.load('username')
     }
+  },
+
+  componentDidMount() {
+    console.log("username", cookie.load('username'));
   },
 
   handleSubmit(e) {
@@ -18,7 +24,12 @@ let Login = React.createClass({
     console.log('Received Form Value：', this.props.form.getFieldsValue());
     var username = this.props.form.getFieldsValue().userName;
     var password = this.props.form.getFieldsValue().password;
-
+    var rememberMe = this.props.form.getFieldsValue().agreement;
+    console.log('rememberMe',rememberMe);
+    var age = 60*60*24*7;
+    if(rememberMe) {
+      age = 60*60*24*30*3;
+    }
     this.setState({ iconLoading: true });
 
     var logged = false;
@@ -43,6 +54,7 @@ let Login = React.createClass({
           console.log("link");
           window.u = username;
           window.p = password;
+          cookie.save('username', username, {maxAge: age});
           browserHistory.push('/');
         }
         this.setState({logged: logged, error: error, iconLoading: false});
@@ -101,7 +113,7 @@ let Login = React.createClass({
           <font size="2" color="darkgrey">   Incorrect username or password!</font>
         </div>);
     }
-    console.log("nolink");
+    // console.log("nolink");
     return <Button type="primary" htmlType="submit" loading={this.state.iconLoading}>Login</Button>
   },
 

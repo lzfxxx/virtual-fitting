@@ -3,6 +3,8 @@ require('babel-polyfill');
 // import App from '../react-three-renderer/js/components/app.react';
 import React from 'react';
 import ReactDOM from 'react-dom';
+import cookie from 'react-cookie';
+
 
 import Global from '../../services/Global';
 import JsonObj from './standard-male-figure.json';
