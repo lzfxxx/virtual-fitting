@@ -24,8 +24,7 @@ function getUsername() {
     return cookie.load('username');
   }
 }
-
-const username = getUsername();
+// const username = getUsername();
 
 
 class SiderPage extends Component {
@@ -41,7 +40,9 @@ class SiderPage extends Component {
       selectedKey: '1',
       username: window.u
     };
+    this.username = getUsername();
     console.log(window.u,window.p);
+    console.log(this.username);
     window.key = '1';
   }
 
@@ -109,16 +110,16 @@ class SiderPage extends Component {
                 <Link to="/">1. Get Started</Link><br />
               </Menu.Item>
               <Menu.Item key="2">
-                <Link to={`/upload_${username}`}>2. Upload Photos</Link><br />
+                <Link to={`/upload_${this.username}`}>2. Upload Photos</Link><br />
               </Menu.Item>
               <Menu.Item key="3">
-                <Link to={`/adjust_${username}`}>3. Adjust Photos</Link><br />
+                <Link to={`/adjust_${this.username}`}>3. Adjust Photos</Link><br />
               </Menu.Item>
               <Menu.Item key="4">
-                <Link to={`/mark_${username}`}>4. Mark Key Points</Link><br />
+                <Link to={`/mark_${this.username}`}>4. Mark Key Points</Link><br />
               </Menu.Item>
               <Menu.Item key="5">
-                <Link to={`/results_${username}`}>5. Results</Link>
+                <Link to={`/results_${this.username}`}>5. Results</Link>
               </Menu.Item>
             </SubMenu>
             <SubMenu key="sub2" title={<span><Icon type="user" /><Link to="/other">Other</Link></span>}>
@@ -141,10 +142,9 @@ class SiderPage extends Component {
           <div className={styles.header}>
             <Row type="flex" justify="space-around" align="middle"
                  className={styles.row}>
-              <Col span={6}> </Col>
-              <Col span={6}> </Col>
-              <Col span={6} className={styles.col}>
-                <p style={{fontSize: 'large'}}>Welcome! {username} &nbsp;</p>
+              <Col span={10} className={styles.col}> </Col>
+              <Col span={10} className={styles.col}>
+                <p style={{fontSize: 'large'}}>Welcome! {this.username} &nbsp;</p>
                 <Button type="ghost" icon="logout" onClick={() => this.showModal()}>
                   Logout
                 </Button>

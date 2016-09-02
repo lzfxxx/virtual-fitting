@@ -26,14 +26,15 @@ function getUsername() {
   }
 }
 
-const username = getUsername();
+// const username = getUsername();
 
 class UploadPage extends Component {
   constructor(props) {
     super(props);
+    this.username = getUsername();
     this.state = {
-      URL1: 'http://0.0.0.0:5500/' + username + '/img1.jpg',
-      URL2: 'http://0.0.0.0:5500/' + username + '/img2.jpg',
+      URL1: 'http://0.0.0.0:5500/' + this.username + '/img1.jpg',
+      URL2: 'http://0.0.0.0:5500/' + this.username + '/img2.jpg',
       // URL3: 'http://0.0.0.0:5500/' + this.props.params.username + '/img3.jpg'
     };
     window.key = '2';
@@ -118,7 +119,8 @@ class ImageUpload extends Component {
     if(info.file.status == 'done') {
       this.setState({
         priviewImage: this.props.URL+'?t='+new Date().getTime(),
-        iconLoading: false
+        iconLoading: false,
+        isImg: true
       }, () => {
         // console.log(this.state.iconLoading);
         setTimeout(this.hide2, 0);

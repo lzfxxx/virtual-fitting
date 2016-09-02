@@ -26,7 +26,7 @@ function getUsername() {
   }
 }
 
-const username = getUsername();
+// const username = getUsername();
 
 
 function base64ToBlob(base64, mime)
@@ -55,9 +55,10 @@ function base64ToBlob(base64, mime)
 class CropperPage extends Component {
   constructor(props) {
     super(props);
+    this.username = getUsername();
     this.state = {
-      URL1: 'http://0.0.0.0:5500/' + username + '/img1.jpg',
-      URL2: 'http://0.0.0.0:5500/' + username + '/img2.jpg',
+      URL1: 'http://0.0.0.0:5500/' + this.username + '/img1.jpg',
+      URL2: 'http://0.0.0.0:5500/' + this.username + '/img2.jpg',
       // URL3: 'http://0.0.0.0:5000/' + this.props.params.username + '/img3.jpg'
     };
   }

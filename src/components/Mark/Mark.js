@@ -28,7 +28,7 @@ function getUsername() {
   }
 }
 
-const username = getUsername();
+// const username = getUsername();
 
 const height = 500;
 const width = 500;
@@ -39,12 +39,13 @@ const zoomWidth = 300;
 class MarkPage extends Component {
   constructor(props) {
     super(props);
+    this.username = getUsername();
     this.state = {
-      URL1: 'http://0.0.0.0:5500/' + username + '/img1.jpg',
-      URL2: 'http://0.0.0.0:5500/' + username + '/img2.jpg',
+      URL1: 'http://0.0.0.0:5500/' + this.username + '/img1.jpg',
+      URL2: 'http://0.0.0.0:5500/' + this.username + '/img2.jpg',
       // URL3: 'http://0.0.0.0:5000/' + 'user1' + '/img3.jpg',
-      url: 'http://0.0.0.0:5000/' + username + '/*',
-      resultsURL: 'http://0.0.0.0:5000/results/' + username,
+      url: 'http://0.0.0.0:5000/' + this.username + '/*',
+      computeURL: 'http://0.0.0.0:5000/compute/' + this.username,
       // URL1: 'http://0.0.0.0:5000/' + this.props.params.username + '/img1.jpg',
       // URL2: 'http://0.0.0.0:5000/' + this.props.params.username + '/img2.jpg',
       // URL3: 'http://0.0.0.0:5000/' + this.props.params.username + '/img3.jpg',
@@ -61,10 +62,10 @@ class MarkPage extends Component {
     return (
       <Tabs defaultActiveKey="1" onChange={callback}>
         <TabPane tab="Front Photo" key="1" className={styles.tab}>
-          <Mark URL={this.state.URL1} tab={"1"} url={this.state.url} resultsURL={this.state.resultsURL}/>
+          <Mark URL={this.state.URL1} tab={"1"} url={this.state.url} resultsURL={this.state.computeURL}/>
         </TabPane>
         <TabPane tab="Side Photo" key="2" className={styles.tab}>
-          <Mark2 URL={this.state.URL2} tab={"2"} url={this.state.url} resultsURL={this.state.resultsURL}/>
+          <Mark2 URL={this.state.URL2} tab={"2"} url={this.state.url} resultsURL={this.state.computeURL}/>
         </TabPane>
       </Tabs>
     );
@@ -370,7 +371,7 @@ var Mark2 = React.createClass({
       case "1":
         break;
       case "2":
-        browserHistory.push('/results');
+        browserHistory.push('/results_'+getUsername());
         break;
     }
   },
@@ -382,6 +383,8 @@ var Mark2 = React.createClass({
   },
   confirm() {
     this.enterLoading();
+    this.hide = message.loading('Computing your body size...', 0);
+
 
     if(this.state.mouseST[0] == 250 && this.state.mouseST[1] == 100
       && this.state.mouseSB[0] == 250 && this.state.mouseSB[1] == 400
@@ -402,7 +405,6 @@ var Mark2 = React.createClass({
       //.withCredentials()
       .send(data)
       .end((err, res) => {
-        this.setState({ loading: false });
         if (err) {
           console.log("Error!!!");
         } else {
@@ -411,11 +413,12 @@ var Mark2 = React.createClass({
             .get(this.props.resultsURL)
             //.withCredentials()
             .end((err, res) => {
+              this.setState({ loading: false });
+              setTimeout(this.hide, 0);
               if (err) {
                 console.log("Error!!!");
               } else {
                 console.log(res);
-                alert(res);
                 this.push();
               }
             });

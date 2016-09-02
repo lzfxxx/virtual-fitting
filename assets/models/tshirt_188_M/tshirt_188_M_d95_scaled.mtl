@@ -1,0 +1,26 @@
+newmtl tshirt_188_M:Material8981
+illum 4
+Kd 0.00 0.00 0.00
+Ka 0.00 0.00 0.00
+Tf 1.00 1.00 1.00
+map_Kd 407_R209_G209_B209.png
+map_Ka 407_R209_G209_B209.png
+Ni 1.00
+Ks 0.00 0.00 0.00
+Ns 5.00
+newmtl tshirt_188_M:Material8987
+illum 4
+Kd 0.00 0.00 0.00
+Ka 0.00 0.00 0.00
+Tf 1.00 1.00 1.00
+Ni 1.00
+Ks 0.00 0.00 0.00
+Ns 5.00
+newmtl tshirt_188_M:Material8993
+illum 4
+Kd 0.00 0.00 0.00
+Ka 0.00 0.00 0.00
+Tf 1.00 1.00 1.00
+Ni 1.00
+Ks 0.00 0.00 0.00
+Ns 5.00

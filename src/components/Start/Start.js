@@ -17,7 +17,6 @@ function getUsername() {
   }
 }
 
-const username = getUsername();
 
 class StartPage extends Component {
 
@@ -27,9 +26,11 @@ class StartPage extends Component {
       world: "hehehe",
       //user: this.props.params.userId,
     };
+    this.username = getUsername();
+    console.log("usernamethis", this.username);
     //window.u = this.props.params.userId;
     console.log(window.u);
-    console.log("username", username);
+    console.log("username", this.username);
 
   }
 
@@ -66,7 +67,7 @@ class StartPage extends Component {
           <p className={styles.desc}>Description</p>
           <p className={styles.desc}>DescriptionDescriptionDescriptionDescription</p>
           <p className={styles.desc}>DescriptionDescriptionDescriptionDescriptionDescriptionDescriptionDescriptionDescription</p>
-          <Link to={`/upload_${username}`}><Button type="primary" style={{ marginTop: 5 }}>Getting Started</Button></Link>
+          <Link to={`/upload_${this.username}`}><Button type="primary" style={{ marginTop: 5 }}>Getting Started</Button></Link>
         </div>
       </div>
     );

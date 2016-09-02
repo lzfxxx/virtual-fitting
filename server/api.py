@@ -1,8 +1,12 @@
-from flask import Flask, jsonify, request, make_response,redirect,url_for
+from flask import Flask, jsonify, request, make_response,redirect,url_for,g
 from flask_restful import reqparse, abort, Api, Resource
 from flask_pymongo import PyMongo
-from flask_httpauth import HTTPBasicAuth
+from flask_httpauth import HTTPBasicAuth, HTTPTokenAuth
+from itsdangerous import (TimedJSONWebSignatureSerializer
+                          as Serializer, BadSignature, SignatureExpired)
+from werkzeug.security import generate_password_hash, check_password_hash
 from PIL import Image
+# from passlib.apps import custom_app_context as pwd_context
 import matlab.engine
 
 UPLOAD_FOLDER = 'file-uploads'
@@ -11,9 +15,12 @@ ALLOWED_EXTENSIONS = set(['png', 'jpg', 'jpeg', 'gif'])
 app = Flask(__name__)
 app.config["MONGO_DBNAME"] = "users_db"
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
+app.config['SECRET_KEY'] = 'fitting'
 mongo = PyMongo(app)
 api = Api(app)
 auth = HTTPBasicAuth()
+authT = HTTPTokenAuth(scheme='Token')
+
 
 APP_URL = "http://0.0.0.0:5000"
 
@@ -35,12 +42,46 @@ USERS = {
   },
 }
 
-@auth.get_password
-def get_password(username):
+#token auth
+@authT.verify_token
+def verify_auth_token(auth_token):
+  serial = Serializer(app.config['SECRET_KEY'])
+  try:
+    data = serial.loads(auth_token)
+  except SignatureExpired:
+    return None
+  except BadSignature:
+    return None
+  serial_user = data['username']
+  return serial_user
+
+@authT.error_handler
+def unauthorized():
+  # return 403 instead of 401 to prevent browsers from displaying the default
+  # auth dialog
+  return make_response(jsonify({'message': 'Unauthorized token access'}), 403)
+
+def abort_if_user_doesnt_exist(user_id):
+  if user_id not in USERS:
+    abort(404, message="User {} doesn't exist".format(user_id))
+
+#basic auth
+@auth.verify_password
+def verify_password(username, password):
+  g.user = None
   user = mongo.db.users.find_one({"username": username})
   if user:
-    return user.get('password')
-  return None
+    if check_password_hash(user.get('password'), password):
+      g.user = username
+      return True
+  return False
+
+# @auth.get_password
+# def get_password(username):
+#   user = mongo.db.users.find_one({"username": username})
+#   if user:
+#     return user.get('password')
+#   return None
 
 
 @auth.error_handler
@@ -57,6 +98,10 @@ parser = reqparse.RequestParser()
 parser.add_argument('img')
 
 
+def generate_auth_token(username, expiration=604800):
+  gen_serial = Serializer(app.config['SECRET_KEY'], expires_in=expiration)
+  return gen_serial.dumps({'username': username})
+
 class User(Resource):
   decorators = [auth.login_required]
   def get(self, user_id):
@@ -65,7 +110,9 @@ class User(Resource):
       user_info = mongo.db.users.find_one({"username": user_id}, {"_id": 0})
       if user_info:
         print(user_id,' login')
-        return jsonify({"status": "ok", "data": user_info})
+        return_token = generate_auth_token(user_id)
+        return {'token':return_token.decode(), "data": user_info}, 200
+        # return jsonify({"status": "ok", "data": user_info})
       else:
         return {"response": "no user found for {}".format(user_id)}
     return jsonify({"response": data})
@@ -132,13 +179,19 @@ class UserList(Resource):
         if mongo.db.users.find_one({"username": username}):
           return {"response": "user already exists."}
         else:
+          print(data)
+          pw = data.get('password')
+          print(generate_password_hash(pw))
+          # data.hash_password(pw)
+          data['password'] = generate_password_hash(pw)
+          print(data)
           mongo.db.users.insert(data)
           return {"response": "post ok"}
       else:
         return {"response": "username number missing"}
 
 
-class Results(Resource):
+class Compute(Resource):
   def get(self, user_id):
     user_info = mongo.db.users.find_one({"username": user_id})
     print("getting data")
@@ -176,7 +229,14 @@ class Results(Resource):
     # image2 = mongo.send_file(filename2)
     # image3 = mongo.send_file(filename3)
 
-
+class Results(Resource):
+  decorators = [authT.login_required]
+  def get(self, user_id):
+    user_info = mongo.db.users.find_one({"username": user_id})
+    H = user_info.get("H")
+    waist = user_info.get("waist_len")
+    chest = user_info.get("chest_len")
+    return {"height": H, "waist": waist, "chest": chest}
 
 ##
 ## Actually setup the Api resource routing here
@@ -184,6 +244,7 @@ class Results(Resource):
 api.add_resource(UserList, '/', endpoint="users")
 api.add_resource(User, '/<user_id>', endpoint="username")
 api.add_resource(ImageUpload, '/<user_id>/<filename>', endpoint="image")
+api.add_resource(Compute, '/compute/<user_id>', endpoint="compute")
 api.add_resource(Results, '/results/<user_id>', endpoint="results")
 
 

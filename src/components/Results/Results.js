@@ -4,25 +4,63 @@ require('babel-polyfill');
 import React from 'react';
 import ReactDOM from 'react-dom';
 import cookie from 'react-cookie';
-
+import { message, Icon, Modal, Button } from 'antd';
 
 import Global from '../../services/Global';
 import JsonObj from './standard-male-figure.json';
 import clothJson from './shirt.json';
 
-const heightSetting = 180;
-const chestSetting = 100;
-const waistSetting = 90;
+const ButtonGroup = Button.Group;
+
+const url = 'http://0.0.0.0:5000/results';
+
+function getUsername() {
+  if(window.u) {
+    return window.u;
+  }
+  if(cookie.load('username')) {
+    return cookie.load('username');
+  }
+}
 
 class ResultPage extends React.Component {
 
   constructor(props) {
     super(props);
     this.state = {
+      typeArray: ["primary" , "default", "default"],
+      clothScale: 1
     };
+    console.log(cookie.load("token"));
   }
 
   componentDidMount() {
+    fetch(url + "/" + getUsername(), {
+      method: 'get',
+      headers: {
+        'Authorization': 'Token ' + cookie.load("token"),
+      },
+    })
+      .then((response) => response.json())
+      .then((responseJson) => {
+        // Global.token = responseJson.token;
+        console.log(responseJson);
+        Global.heightSetting = parseInt(responseJson.height);
+        Global.chestSetting = parseInt(responseJson.chest);
+        Global.waistSetting = parseInt(responseJson.waist);
+        var heightSetting = parseInt(responseJson.height);
+        var chestSetting = parseInt(responseJson.chest);
+        var waistSetting = parseInt(responseJson.waist);
+        this.renderModels(heightSetting, chestSetting, waistSetting, this.state.clothScale);
+      })
+      .catch((error) => {
+        console.error(error);
+      });
+  }
+
+  renderModels(heightSetting, chestSetting, waistSetting, clothScale) {
+    chestSetting -= 10;
+    waistSetting -= 20;
     // Detects webgl
     if ( ! Detector.webgl ) {
       Detector.addGetWebGLMessage();
@@ -534,7 +572,7 @@ class ResultPage extends React.Component {
 // load a resource
       loader.load(
         // resource URL
-        'http://127.0.0.1:8000/models/md_fat_cloth/md_fat_cloth_d_scaled.obj',
+        'http://127.0.0.1:8000/models/tshirt_188_M/tshirt_188_M_d95_p1_scaled.obj',
         // Function when resource is loaded
         function ( object ) {
           // console.log(object);
@@ -542,8 +580,31 @@ class ResultPage extends React.Component {
           cloth = object.children[0];
           console.log(cloth);
           // var threeObject = object.children[0];
-          const scale = 0.003;
-          // cloth.scale.set(scale, scale, scale);
+          // const scale = 0.003;
+          var Scale = 1;
+          var def = 170/194;
+          var clothHeight = 170;
+          switch(clothScale) {
+            case 1:
+              Scale = 1;
+              clothHeight = 170;
+              break;
+            case 2:
+              Scale = 180/170;
+              clothHeight = 180;
+              break;
+            case 3:
+              Scale = 190/170;
+              clothHeight = 190;
+              break;
+          }
+          // alert(clothScale);
+          Scale = Scale * def;
+          var sevencm = 0.2;
+          var unitcm = 0.2/7;
+          cloth.scale.set(Scale, Scale, Scale*1.1);
+          var heightDiff = heightSetting - clothHeight;
+          cloth.position.set(0, unitcm * heightDiff, 0);
           cloth.castShadow = true;
           cloth.receiveShadow = true;
           scene.add( cloth );
@@ -928,9 +989,46 @@ class ResultPage extends React.Component {
     }
   }
 
+  changeSize(size) {
+    switch(size) {
+      case "S":
+        this.setState({
+          typeArray: ["primary" , "default", "default"],
+          clothScale: 1
+        }, () => {
+          this.renderModels(Global.heightSetting, Global.chestSetting, Global.waistSetting, this.state.clothScale);
+        });
+        break;
+      case "M":
+        this.setState({
+          typeArray: ["default" , "primary", "default"],
+          clothScale: 2
+        }, () => {
+          this.renderModels(Global.heightSetting, Global.chestSetting, Global.waistSetting, this.state.clothScale);
+        });
+        break;
+      case "L":
+        this.setState({
+          typeArray: ["default" , "default", "primary"],
+          clothScale: 3
+        }, () => {
+          this.renderModels(Global.heightSetting, Global.chestSetting, Global.waistSetting, this.state.clothScale);
+        });
+        break;
+    }
+  }
+
   render() {
+    console.log(this.state.typeArray[0],this.state.typeArray[1],this.state.typeArray[2]);
     return (
-      <div id="container"><br /><br /><br /><br /><br />Loading...</div>
+      <div>
+        <ButtonGroup>
+          <Button type={this.state.typeArray[0]} onClick={() => this.changeSize("S")}>S</Button>
+          <Button type={this.state.typeArray[1]} onClick={() => this.changeSize("M")}>M</Button>
+          <Button type={this.state.typeArray[2]} onClick={() => this.changeSize("L")}>L</Button>
+        </ButtonGroup>
+        <div id="container"><br /><br /><br /><br /><br />Loading...</div>
+      </div>
     );
   }
 }

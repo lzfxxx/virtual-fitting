@@ -66,12 +66,12 @@ class Sider extends Component {
       <div className={styles.header}>
         <Row type="flex" justify="space-around" align="middle"
              className={styles.row}>
-          <Col span={6} className={styles.logocol}>
+          <Col span={10} className={styles.logocol}>
             <div className={styles.logo}></div>
           </Col>
-          <Col span={6}> </Col>
 
-          <Col span={6} className={styles.col}>
+
+          <Col span={10} className={styles.col}>
             <Button type="ghost" icon="user" onClick={() => this.showModal()}>
               Login
             </Button>

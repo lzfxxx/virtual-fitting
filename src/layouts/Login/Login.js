@@ -34,8 +34,8 @@ let Login = React.createClass({
 
     var logged = false;
     var error = false;
-    console.log(e);
-    console.log(this);
+    // console.log(e);
+    // console.log(this);
     var url = 'http://0.0.0.0:5000/'+username;
     //get by superagent and flask
     request
@@ -54,6 +54,7 @@ let Login = React.createClass({
           console.log("link");
           window.u = username;
           window.p = password;
+          cookie.save('token', res.body.token, {maxAge: age});
           cookie.save('username', username, {maxAge: age});
           browserHistory.push('/');
         }
