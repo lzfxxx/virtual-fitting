@@ -8,9 +8,12 @@ import NotFound from '../components/NotFound';
 import Adjust from '../components/Adjust/Adjust';
 import Mark from '../components/Mark/Mark';
 import Results from '../components/Results/Results';
+<<<<<<< HEAD
 import Vedio from '../components/Vedio/Vedio';
 
 import Menu from '../layouts/Menu/Menu';
+=======
+>>>>>>> parent of 208db65... back up
 // import Cloth from '../components/Cloth/Cloth';
 
 import Three from '../components/react-three/app';

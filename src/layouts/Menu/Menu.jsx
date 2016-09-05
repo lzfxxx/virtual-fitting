@@ -15,7 +15,6 @@ import styles from './Menu.less';
 import Login from '../Login/Login';
 import Signup from '../Signup/Signup';
 import cookie from 'react-cookie';
-import Global from '../../services/Global';
 
 function getUsername() {
   if(window.u) {

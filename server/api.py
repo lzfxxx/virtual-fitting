@@ -202,8 +202,8 @@ class Compute(Resource):
     TC = user_info.get("TC")
     CC = user_info.get("CC")
     H = user_info.get("H")
-    path_front = 'http://0.0.0.0:5000/' + user_id + '/img1.jpg'
-    path_side = 'http://0.0.0.0:5000/' + user_id + '/img2.jpg'
+    path_front = 'http://0.0.0.0:5500/' + user_id + '/img1.jpg'
+    path_side = 'http://0.0.0.0:5500/' + user_id + '/img2.jpg'
     eng = matlab.engine.start_matlab()
     # ft = matlab.double([FT[0],FT[1]])
     absH = float(H)
@@ -257,4 +257,4 @@ def after_request(response):
   return response
 
 if __name__ == '__main__':
-  app.run(debug=True, host='0.0.0.0',threaded=True)
+  app.run(debug=True, host='0.0.0.0')
