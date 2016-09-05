@@ -24,6 +24,9 @@ npm start
 python api.py
 ```
 ```
+python imgdb.py
+```
+```
 mongod
 ```
 visit http://127.0.0.1:8989
