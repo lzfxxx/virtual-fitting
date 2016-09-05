@@ -41,8 +41,8 @@ class MarkPage extends Component {
     super(props);
     this.username = getUsername();
     this.state = {
-      URL1: 'http://0.0.0.0:5500/' + this.username + '/img1.jpg',
-      URL2: 'http://0.0.0.0:5500/' + this.username + '/img2.jpg',
+      URL1: 'http://0.0.0.0:5000/' + this.username + '/img1.jpg',
+      URL2: 'http://0.0.0.0:5000/' + this.username + '/img2.jpg',
       // URL3: 'http://0.0.0.0:5000/' + 'user1' + '/img3.jpg',
       url: 'http://0.0.0.0:5000/' + this.username + '/*',
       computeURL: 'http://0.0.0.0:5000/compute/' + this.username,

@@ -1,6 +1,6 @@
 import React, { Component, PropTypes } from 'react';
 import { Button } from 'antd';
-import { Router, Route, IndexRoute, Link } from 'react-router';
+import { Router, Route, IndexRoute, Link, browserHistory } from 'react-router';
 import styles from './Start.less';
 require('es6-promise').polyfill();
 import fetch from 'isomorphic-fetch';
@@ -32,6 +32,11 @@ class StartPage extends Component {
     console.log(window.u);
     console.log("username", this.username);
 
+  }
+
+  push() {
+    window.key = '2';
+    browserHistory.push('/upload_'+getUsername());
   }
 
   componentDidMount() {
@@ -67,7 +72,7 @@ class StartPage extends Component {
           <p className={styles.desc}>Description</p>
           <p className={styles.desc}>DescriptionDescriptionDescriptionDescription</p>
           <p className={styles.desc}>DescriptionDescriptionDescriptionDescriptionDescriptionDescriptionDescriptionDescription</p>
-          <Link to={`/upload_${this.username}`}><Button type="primary" style={{ marginTop: 5 }}>Getting Started</Button></Link>
+         <Button type="primary" style={{ marginTop: 5 }} onClick={() => this.push()}>Getting Started</Button>
         </div>
       </div>
     );

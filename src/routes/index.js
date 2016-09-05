@@ -8,6 +8,8 @@ import NotFound from '../components/NotFound';
 import Adjust from '../components/Adjust/Adjust';
 import Mark from '../components/Mark/Mark';
 import Results from '../components/Results/Results';
+
+import Menu from '../layouts/Menu/Menu';
 // import Cloth from '../components/Cloth/Cloth';
 
 import Three from '../components/react-three/app';
