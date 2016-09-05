@@ -123,18 +123,24 @@ class SiderPage extends Component {
                 <Link to={`/results_${this.username}`}>5. Results</Link>
               </Menu.Item>
             </SubMenu>
-            <SubMenu key="sub2" title={<span><Icon type="user" /><Link to="/other">Other</Link></span>}>
+            <SubMenu key="sub2" title={<span><Icon type="user" /><Link to="/other">Tutorials</Link></span>}>
               <Menu.Item key="5">
-                <Link to="/1">1</Link><br />
+                <Link to="/1">Full Demo</Link><br />
               </Menu.Item>
               <Menu.Item key="6">
-                <Link to="/2">2</Link><br />
+                <Link to="/2">Registration and Login</Link><br />
               </Menu.Item>
               <Menu.Item key="7">
-                <Link to="/3">3</Link><br />
+                <Link to="/3">Upload Photos</Link><br />
               </Menu.Item>
               <Menu.Item key="8">
-                <Link to="/4">4</Link><br />
+                <Link to="/4">Adjust Photos</Link><br />
+              </Menu.Item>
+              <Menu.Item key="9">
+                <Link to="/5">Mark Key Points</Link><br />
+              </Menu.Item>
+              <Menu.Item key="10">
+                <Link to="/6">Results</Link><br />
               </Menu.Item>
             </SubMenu>
           </Menu>

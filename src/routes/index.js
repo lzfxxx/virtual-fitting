@@ -8,6 +8,7 @@ import NotFound from '../components/NotFound';
 import Adjust from '../components/Adjust/Adjust';
 import Mark from '../components/Mark/Mark';
 import Results from '../components/Results/Results';
+import Vedio from '../components/Vedio/Vedio';
 
 import Menu from '../layouts/Menu/Menu';
 // import Cloth from '../components/Cloth/Cloth';
@@ -24,11 +25,13 @@ const Routes = ({ history }) =>
       <Route path="adjust_:username" component={Adjust} />
       <Route path="mark_:username" component={Mark} />
       <Route path="results_:username" component={Results} />
-      <Route path="other" component={NotFound} />
-      <Route path="1" component={NotFound} />
-      <Route path="2" component={NotFound} />
-      <Route path="3" component={NotFound} />
-      <Route path="4" component={NotFound} />
+      <Route path="other" component={Vedio} />
+      <Route path="1" component={Vedio} />
+      <Route path="2" component={Vedio} />
+      <Route path="3" component={Vedio} />
+      <Route path="4" component={Vedio} />
+      <Route path="5" component={Vedio} />
+      <Route path="6" component={Vedio} />
       <Route path="*" component={NotFound} />
     </Route>
   </Router>;

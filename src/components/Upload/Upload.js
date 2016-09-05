@@ -3,7 +3,7 @@ import { message, Upload, Icon, Modal, Button } from 'antd';
 import styles from './Upload.less';
 import request from 'superagent';
 import cookie from 'react-cookie';
-
+import Vedio from '../Vedio/Vedio';
 const img1 = 'http://0.0.0.0:5000/admin/example2.jpg'+'?t='+new Date().getTime();
 const img2 = 'http://0.0.0.0:5000/admin/example1.jpg'+'?t='+new Date().getTime();
 
@@ -35,16 +35,42 @@ class UploadPage extends Component {
     this.state = {
       URL1: 'http://0.0.0.0:5000/' + this.username + '/img1.jpg',
       URL2: 'http://0.0.0.0:5000/' + this.username + '/img2.jpg',
+      visible: false,
       // URL3: 'http://0.0.0.0:5500/' + this.props.params.username + '/img3.jpg'
     };
     window.key = '2';
   }
 
+  handleCancel() {
+    this.setState({
+      visible: false,
+    });
+  }
+  showModal() {
+    this.setState({
+      visible: true,
+    });
+  }
+
   render() {
     return (
-      <div className={styles.container}>
-        <ImageUpload image={img1} URL={this.state.URL1} text={'Upload your front photo'} border={1}/>
-        <ImageUpload image={img2} URL={this.state.URL2} text={'Upload your side photo'}  border={1}/>
+      <div>
+        <div >
+          <Button type="ghost" style={{top: 100, right: 30, position: 'absolute'}} shape="circle-outline" icon="question-circle-o"  onClick={() => this.showModal()}>
+          </Button>
+          <div style={{height: '25px'}}></div>
+          <Modal ref="modal"
+                 visible={this.state.visible}
+                 title="Demo" onCancel={() => this.handleCancel()}
+                 footer={[]}
+          >
+            <Vedio height={"300px"}/>
+          </Modal>
+        </div>
+        <div className={styles.container}>
+          <ImageUpload image={img1} URL={this.state.URL1} text={'Upload your front photo'} border={1}/>
+          <ImageUpload image={img2} URL={this.state.URL2} text={'Upload your side photo'}  border={1}/>
+        </div>
       </div>
     );
   }
@@ -120,7 +146,7 @@ class ImageUpload extends Component {
       this.setState({
         priviewImage: this.props.URL+'?t='+new Date().getTime(),
         iconLoading: false,
-        isImg: true
+        isImg: 'true'
       }, () => {
         // console.log(this.state.iconLoading);
         setTimeout(this.hide2, 0);

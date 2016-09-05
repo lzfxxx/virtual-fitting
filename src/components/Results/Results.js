@@ -9,6 +9,7 @@ import { message, Icon, Modal, Button } from 'antd';
 import Global from '../../services/Global';
 import JsonObj from './standard-male-figure.json';
 import clothJson from './shirt.json';
+import Vedio from '../Vedio/Vedio';
 
 const ButtonGroup = Button.Group;
 
@@ -29,7 +30,11 @@ class ResultPage extends React.Component {
     super(props);
     this.state = {
       typeArray: ["primary" , "default", "default"],
-      clothScale: 1
+      clothScale: 1,
+      visible: false,
+      heightSetting: 'loading',
+      chestSetting: 'loading',
+      waistSetting: 'loading',
     };
     console.log(cookie.load("token"));
   }
@@ -48,6 +53,11 @@ class ResultPage extends React.Component {
         Global.heightSetting = parseInt(responseJson.height);
         Global.chestSetting = parseInt(responseJson.chest);
         Global.waistSetting = parseInt(responseJson.waist);
+        this.setState({
+          heightSetting: parseInt(responseJson.height),
+          chestSetting: parseInt(responseJson.chest),
+          waistSetting: parseInt(responseJson.waist),
+        });
         var heightSetting = parseInt(responseJson.height);
         var chestSetting = parseInt(responseJson.chest);
         var waistSetting = parseInt(responseJson.waist);
@@ -59,7 +69,7 @@ class ResultPage extends React.Component {
   }
 
   renderModels(heightSetting, chestSetting, waistSetting, clothScale) {
-    chestSetting -= 10;
+    chestSetting -= 15;
     waistSetting -= 20;
     // Detects webgl
     if ( ! Detector.webgl ) {
@@ -374,8 +384,7 @@ class ResultPage extends React.Component {
       // The body
       // instantiate a loader
       var loader = new THREE.OBJLoader();
-      var scale = 1;
-      scale = heightSetting/Global.mheight;
+      var scale = heightSetting/Global.mheight;
       var waist = Global.mwaist*scale;
       var chest = Global.mchest*scale;
       var humanDiffWaist;
@@ -424,21 +433,15 @@ class ResultPage extends React.Component {
                   console.log(humanDiffChest);
 
 
-                  // var threeObject = object.children[0];
-                  var a1 = human.geometry.attributes.position.array;
-                  var a2 = humanDiffWaist.geometry.attributes.position.array;
-                  var a3 = humanDiffChest.geometry.attributes.position.array;
-                  // var a1copy1 = a1.slice();
-                  // var a1copy2 = a1.slice();
-                  for(var i = 0; i < a1.length; i++) {
-                    var a1s = a1[i] * scale;
-                    // var a2s = a2[i] * scale;
-                    // var a3s = a3[i] * scale;
-                    var WaistDiff;
-                    var ChestDiff;
-                    WaistDiff = ((a2[i] - a1[i]) / (90 - 71)) * (waistSetting - waist);
-                    ChestDiff = ((a3[i] - a1[i]) / (100 - 91)) * (chestSetting - chest);
-                    a1[i] = a1s + WaistDiff + ChestDiff;
+
+                  var humanArray = human.geometry.attributes.position.array;
+                  var humanDiffWaistArray = humanDiffWaist.geometry.attributes.position.array;
+                  var humanDiffChestArray = humanDiffChest.geometry.attributes.position.array;
+                  for(var i = 0; i < humanArray.length; i++) {
+                    var humanArray_s = humanArray[i] * scale;
+                    var WaistDiff = ((humanDiffWaistArray[i] - humanArray[i]) / (90 - 71)) * (waistSetting - waist);
+                    var ChestDiff = ((humanDiffChestArray[i] - humanArray[i]) / (100 - 91)) * (chestSetting - chest);
+                    humanArray[i] = humanArray_s + WaistDiff + ChestDiff;
                   }
 
                   console.log("calculated");
@@ -572,7 +575,7 @@ class ResultPage extends React.Component {
 // load a resource
       loader.load(
         // resource URL
-        'http://127.0.0.1:8000/models/tshirt_188_M/tshirt_188_M_d95_p1_scaled.obj',
+        'http://127.0.0.1:8000/models/tshirt_188_c112_w106/tshirt_188_c112_w106_d95_p1_scaled.obj',
         // Function when resource is loaded
         function ( object ) {
           // console.log(object);
@@ -602,7 +605,7 @@ class ResultPage extends React.Component {
           Scale = Scale * def;
           var sevencm = 0.2;
           var unitcm = 0.2/7;
-          cloth.scale.set(Scale, Scale, Scale*1.1);
+          cloth.scale.set(Scale, Scale, Scale);
           var heightDiff = heightSetting - clothHeight;
           cloth.position.set(0, unitcm * heightDiff, 0);
           cloth.castShadow = true;
@@ -1018,15 +1021,45 @@ class ResultPage extends React.Component {
     }
   }
 
+  handleCancel() {
+    this.setState({
+      visible: false,
+    });
+  }
+  showModal() {
+    this.setState({
+      visible: true,
+    });
+  }
+
   render() {
     console.log(this.state.typeArray[0],this.state.typeArray[1],this.state.typeArray[2]);
     return (
       <div>
-        <ButtonGroup>
+        <b>Choose the cloth size you want to try on:</b><br />
+        <Button type="ghost" style={{top: 100, right: 30, position: 'absolute'}} shape="circle-outline" icon="question-circle-o"  onClick={() => this.showModal()}>
+        </Button>
+        <Modal ref="modal"
+               visible={this.state.visible}
+               title="Demo" onCancel={() => this.handleCancel()}
+               footer={[]}
+        >
+          <Vedio height={"300px"}/>
+        </Modal>
+        <ButtonGroup style={{paddingTop: 5, paddingBottom: 5}}>
           <Button type={this.state.typeArray[0]} onClick={() => this.changeSize("S")}>S</Button>
           <Button type={this.state.typeArray[1]} onClick={() => this.changeSize("M")}>M</Button>
           <Button type={this.state.typeArray[2]} onClick={() => this.changeSize("L")}>L</Button>
         </ButtonGroup>
+        <br />
+        <div style={{position: 'absolute', top: 180, left: 280}}>
+          <p>
+            <b>Your Body Sizes:</b><br />
+            Height: {this.state.heightSetting} cm<br />
+            Chest: {this.state.chestSetting} cm<br />
+            Waist: {this.state.waistSetting} cm<br />
+          </p>
+        </div>
         <div id="container"><br /><br /><br /><br /><br />Loading...</div>
       </div>
     );

@@ -5,6 +5,8 @@ import styles from './Mark.less';
 import { Icon, Modal, Button, Tabs,message, Input } from 'antd';
 import request from 'superagent';
 import cookie from 'react-cookie';
+import Vedio from '../Vedio/Vedio';
+
 
 const TabPane = Tabs.TabPane;
 
@@ -46,6 +48,7 @@ class MarkPage extends Component {
       // URL3: 'http://0.0.0.0:5000/' + 'user1' + '/img3.jpg',
       url: 'http://0.0.0.0:5000/' + this.username + '/*',
       computeURL: 'http://0.0.0.0:5000/compute/' + this.username,
+      visible: false,
       // URL1: 'http://0.0.0.0:5000/' + this.props.params.username + '/img1.jpg',
       // URL2: 'http://0.0.0.0:5000/' + this.props.params.username + '/img2.jpg',
       // URL3: 'http://0.0.0.0:5000/' + this.props.params.username + '/img3.jpg',
@@ -54,20 +57,42 @@ class MarkPage extends Component {
     };
   }
 
+  handleCancel() {
+    this.setState({
+      visible: false,
+    });
+  }
+  showModal() {
+    this.setState({
+      visible: true,
+    });
+  }
+
   render() {
     function callback(key) {
       console.log(key);
     }
 
     return (
-      <Tabs defaultActiveKey="1" onChange={callback}>
-        <TabPane tab="Front Photo" key="1" className={styles.tab}>
-          <Mark URL={this.state.URL1} tab={"1"} url={this.state.url} resultsURL={this.state.computeURL}/>
-        </TabPane>
-        <TabPane tab="Side Photo" key="2" className={styles.tab}>
-          <Mark2 URL={this.state.URL2} tab={"2"} url={this.state.url} resultsURL={this.state.computeURL}/>
-        </TabPane>
-      </Tabs>
+      <div>
+        <Button type="ghost" style={{top: 100, right: 30, position: 'absolute'}} shape="circle-outline" icon="question-circle-o"  onClick={() => this.showModal()}>
+        </Button>
+        <Modal ref="modal"
+               visible={this.state.visible}
+               title="Demo" onCancel={() => this.handleCancel()}
+               footer={[]}
+        >
+          <Vedio height={"300px"}/>
+        </Modal>
+        <Tabs defaultActiveKey="1" onChange={callback}>
+          <TabPane tab="Front Photo" key="1" className={styles.tab}>
+            <Mark URL={this.state.URL1} tab={"1"} url={this.state.url} resultsURL={this.state.computeURL}/>
+          </TabPane>
+          <TabPane tab="Side Photo" key="2" className={styles.tab}>
+            <Mark2 URL={this.state.URL2} tab={"2"} url={this.state.url} resultsURL={this.state.computeURL}/>
+          </TabPane>
+        </Tabs>
+      </div>
     );
   }
 }

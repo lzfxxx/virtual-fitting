@@ -5,6 +5,7 @@ import 'cropperjs/dist/cropper.css';
 import { Icon, Modal, Button, Tabs,message} from 'antd';
 import request from 'superagent';
 import cookie from 'react-cookie';
+import Vedio from '../Vedio/Vedio';
 
 //import fs from 'fs';
 
@@ -59,9 +60,22 @@ class CropperPage extends Component {
     this.state = {
       URL1: 'http://0.0.0.0:5000/' + this.username + '/img1.jpg',
       URL2: 'http://0.0.0.0:5000/' + this.username + '/img2.jpg',
+      visible: false,
       // URL3: 'http://0.0.0.0:5000/' + this.props.params.username + '/img3.jpg'
     };
   }
+
+  handleCancel() {
+    this.setState({
+      visible: false,
+    });
+  }
+  showModal() {
+    this.setState({
+      visible: true,
+    });
+  }
+
 
   render() {
     function callback(key) {
@@ -69,14 +83,25 @@ class CropperPage extends Component {
     }
 
     return (
-      <Tabs defaultActiveKey="1" onChange={callback}>
-        <TabPane tab="Front Photo" key="1" className={styles.tab}>
-          <MyCropper URL={this.state.URL1}/>
-        </TabPane>
-        <TabPane tab="Side Photo" key="2" className={styles.tab}>
-          <MyCropper URL={this.state.URL2}/>
-        </TabPane>
-      </Tabs>
+      <div>
+        <Button type="ghost" style={{top: 100, right: 30, position: 'absolute'}} shape="circle-outline" icon="question-circle-o"  onClick={() => this.showModal()}>
+        </Button>
+        <Modal ref="modal"
+               visible={this.state.visible}
+               title="Demo" onCancel={() => this.handleCancel()}
+               footer={[]}
+        >
+          <Vedio height={"300px"}/>
+        </Modal>
+        <Tabs defaultActiveKey="1" onChange={callback}>
+          <TabPane tab="Front Photo" key="1" className={styles.tab}>
+            <MyCropper URL={this.state.URL1}/>
+          </TabPane>
+          <TabPane tab="Side Photo" key="2" className={styles.tab}>
+            <MyCropper URL={this.state.URL2}/>
+          </TabPane>
+        </Tabs>
+      </div>
     );
   }
 }
@@ -244,9 +269,9 @@ class MyCropper extends Component {
             <img
               className={styles.img}
               style={{
-            width: '70%'
-            //height: 400
-            }} src={this.state.cropResult} />
+                width: '70%'
+                //height: 400
+              }} src={this.state.cropResult} />
           </div>
           <div style={{ width: '100%', float: 'right' ,height: '100%'}} className={styles.container4}>
             <Button type="ghost" icon="upload" loading={this.state.iconLoading} onClick={ ()=>this._uploadImage() } style={{ float: 'right' }}>
