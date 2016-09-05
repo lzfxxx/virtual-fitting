@@ -12,7 +12,23 @@ https://github.com/airbnb/javascript
 
 ## Develop
 
-Run following commands in separate terminal window under project root folder
+### Pre-installs
+
+First, You need to install MATLAB on your machine, and [install MATLAB Engine API for Python](http://www.mathworks.com/help/matlab/matlab_external/install-the-matlab-engine-for-python.html).
+
+Then Python environment and npm packages need to be installed by running following commands in root folder:
+
+```
+pip install Flask flask-restful flask-pymongo PyMongo flask-httpauth itsdangerous werkzeug Pillow
+```
+
+```
+npm install
+```
+
+### Every time before developing
+
+Run following commands in separate terminal window under project root folder when developing:
 
 ```
 cd assets/ && python simple-cors-http-server.py
@@ -22,9 +38,6 @@ npm start
 ```
 ```
 python api.py
-```
-```
-python imgdb.py
 ```
 ```
 mongod
