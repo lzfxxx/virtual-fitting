@@ -4,8 +4,9 @@ const createForm = Form.create;
 const FormItem = Form.Item;
 import styles from  './Signup.less';
 import request from 'superagent';
+import Global from '../../services/Global';
 
-const SEVER='http://127.0.0.1:5000/user/';
+const SEVER=Global.url + 'user/';
 
 const ERROR = {"response": "ERROR"};
 const EXISTS= {"response": "user already exists."};
@@ -40,9 +41,9 @@ let Signup = React.createClass({
       }
 
       var data = {"username": values.name, "password": values.passwd, "img": "a photo"};
-     
+
       request
-        .post('http://127.0.0.1:5000/')
+        .post(Global.url)
         // .post('http://127.0.0.1:8983/solr/gettingstarted/update')
         .set('Content-Type', 'application/json')
         .send(data)

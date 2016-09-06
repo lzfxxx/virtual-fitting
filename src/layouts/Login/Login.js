@@ -4,6 +4,7 @@ import { Form, Input, Button, Checkbox } from 'antd';
 import request from 'superagent';
 // let jsonp = require('superagent-jsonp');
 import cookie from 'react-cookie';
+import Global from '../../services/Global';
 
 const FormItem = Form.Item;
 let Login = React.createClass({
@@ -36,7 +37,7 @@ let Login = React.createClass({
     var error = false;
     // console.log(e);
     // console.log(this);
-    var url = 'http://0.0.0.0:5000/'+username;
+    var url = Global.url+username;
     //get by superagent and flask
     request
       .get(url)

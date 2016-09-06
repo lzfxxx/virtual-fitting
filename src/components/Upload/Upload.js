@@ -3,15 +3,13 @@ import { message, Upload, Icon, Modal, Button } from 'antd';
 import styles from './Upload.less';
 import request from 'superagent';
 import cookie from 'react-cookie';
-<<<<<<< HEAD
 import Vedio from '../Vedio/Vedio';
-const img1 = 'http://0.0.0.0:5000/admin/example2.jpg'+'?t='+new Date().getTime();
-const img2 = 'http://0.0.0.0:5000/admin/example1.jpg'+'?t='+new Date().getTime();
-=======
+import Global from '../../services/Global';
 
-const img1 = 'http://0.0.0.0:5500/admin/example2.jpg'+'?t='+new Date().getTime();
-const img2 = 'http://0.0.0.0:5500/admin/example1.jpg'+'?t='+new Date().getTime();
->>>>>>> parent of 208db65... back up
+const img1 = Global.img + 't2.png';
+const img2 = Global.img + 't1.png';
+// const img1 = 'http://0.0.0.0:5000/admin/example2.jpg'+'?t='+new Date().getTime();
+// const img2 = 'http://0.0.0.0:5000/admin/example1.jpg'+'?t='+new Date().getTime();
 
 // const img3 = 'http://0.0.0.0:5500/admin/example3.jpg'+'?t='+new Date().getTime();
 
@@ -39,14 +37,9 @@ class UploadPage extends Component {
     super(props);
     this.username = getUsername();
     this.state = {
-<<<<<<< HEAD
-      URL1: 'http://0.0.0.0:5000/' + this.username + '/img1.jpg',
-      URL2: 'http://0.0.0.0:5000/' + this.username + '/img2.jpg',
+      URL1: Global.url + this.username + '/img1.jpg',
+      URL2: Global.url + this.username + '/img2.jpg',
       visible: false,
-=======
-      URL1: 'http://0.0.0.0:5500/' + this.username + '/img1.jpg',
-      URL2: 'http://0.0.0.0:5500/' + this.username + '/img2.jpg',
->>>>>>> parent of 208db65... back up
       // URL3: 'http://0.0.0.0:5500/' + this.props.params.username + '/img3.jpg'
     };
     window.key = '2';

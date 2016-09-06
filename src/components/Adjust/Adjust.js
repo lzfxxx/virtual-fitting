@@ -6,6 +6,7 @@ import { Icon, Modal, Button, Tabs,message} from 'antd';
 import request from 'superagent';
 import cookie from 'react-cookie';
 import Vedio from '../Vedio/Vedio';
+import Global from '../../services/Global';
 
 //import fs from 'fs';
 
@@ -58,14 +59,9 @@ class CropperPage extends Component {
     super(props);
     this.username = getUsername();
     this.state = {
-<<<<<<< HEAD
-      URL1: 'http://0.0.0.0:5000/' + this.username + '/img1.jpg',
-      URL2: 'http://0.0.0.0:5000/' + this.username + '/img2.jpg',
+      URL1: Global.url + this.username + '/img1.jpg',
+      URL2: Global.url + this.username + '/img2.jpg',
       visible: false,
-=======
-      URL1: 'http://0.0.0.0:5500/' + this.username + '/img1.jpg',
-      URL2: 'http://0.0.0.0:5500/' + this.username + '/img2.jpg',
->>>>>>> parent of 208db65... back up
       // URL3: 'http://0.0.0.0:5000/' + this.props.params.username + '/img3.jpg'
     };
   }

@@ -6,6 +6,7 @@ import { Icon, Modal, Button, Tabs,message, Input } from 'antd';
 import request from 'superagent';
 import cookie from 'react-cookie';
 import Vedio from '../Vedio/Vedio';
+import Global from '../../services/Global';
 
 
 const TabPane = Tabs.TabPane;
@@ -43,11 +44,11 @@ class MarkPage extends Component {
     super(props);
     this.username = getUsername();
     this.state = {
-      URL1: 'http://0.0.0.0:5500/' + this.username + '/img1.jpg',
-      URL2: 'http://0.0.0.0:5500/' + this.username + '/img2.jpg',
+      URL1: Global.url + this.username + '/img1.jpg',
+      URL2: Global.url + this.username + '/img2.jpg',
       // URL3: 'http://0.0.0.0:5000/' + 'user1' + '/img3.jpg',
-      url: 'http://0.0.0.0:5000/' + this.username + '/*',
-      computeURL: 'http://0.0.0.0:5000/compute/' + this.username,
+      url: Global.url + this.username + '/*',
+      computeURL: Global.url + 'compute/' + this.username,
       visible: false,
       // URL1: 'http://0.0.0.0:5000/' + this.props.params.username + '/img1.jpg',
       // URL2: 'http://0.0.0.0:5000/' + this.props.params.username + '/img2.jpg',

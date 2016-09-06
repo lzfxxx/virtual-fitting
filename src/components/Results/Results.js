@@ -13,7 +13,7 @@ import Vedio from '../Vedio/Vedio';
 
 const ButtonGroup = Button.Group;
 
-const url = 'http://0.0.0.0:5000/results';
+const url = Global.url +'results';
 
 function getUsername() {
   if(window.u) {
