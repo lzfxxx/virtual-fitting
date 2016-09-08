@@ -16,6 +16,8 @@ https://github.com/airbnb/javascript
 
 First, You need to install MATLAB on your machine, and [install MATLAB Engine API for Python](http://www.mathworks.com/help/matlab/matlab_external/install-the-matlab-engine-for-python.html).
 
+Then, the database MongoDB also need to be installed following [this page](https://docs.mongodb.com/manual/installation/), choose your system.
+
 Then Python environment and npm packages need to be installed by running following commands in root folder:
 
 ```

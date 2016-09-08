@@ -120,7 +120,7 @@ class User(Resource):
   def delete(self, user_id):
     mongo.db.users.remove({'username': user_id})
     # mongo.db.users.remove({'resized': 'true'})
-    return '', 204
+    return {"response": "200 deleted"}
 
 
 class ImageUpload(Resource):
@@ -151,7 +151,7 @@ class ImageUpload(Resource):
   def put(self, user_id, filename):
     data = request.get_json()
     mongo.db.users.update({'username': user_id}, {'$set': data})
-    return "ok", 201
+    return {"response": "201 ok"}
 
 
 class UserList(Resource):
@@ -162,7 +162,7 @@ class UserList(Resource):
     cursor = mongo.db.users.find()
 
     for user in cursor:
-        print user
+        # print user
         user = APP_URL + "/" + user.get('username')
         data.append(user)
 
@@ -225,7 +225,7 @@ class Compute(Resource):
     waist = user_info.get("waist_len")
     chest = user_info.get("chest_len")
     print(waist, chest)
-    return 200
+    return {"response": "200 ok"}
     # image2 = mongo.send_file(filename2)
     # image3 = mongo.send_file(filename3)
 
@@ -236,7 +236,7 @@ class Results(Resource):
     H = user_info.get("H")
     waist = user_info.get("waist_len")
     chest = user_info.get("chest_len")
-    return {"height": H, "waist": waist, "chest": chest}
+    return {"height": H, "waist": waist, "chest": chest, "response": "200 ok"}
 
 ##
 ## Actually setup the Api resource routing here
