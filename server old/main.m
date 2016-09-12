@@ -3,7 +3,7 @@ function result = main(path_front, path_side, absH, rheight_front, rheight_side,
     %path_frontView = 'data/img/1/1.jpg';
     %path_sideView = 'data/img/1/2.jpg';
     %absH = 177;
-%     display(absH);
+%      display(absH);
 %     display(path_front);
 %     display(path_side);
 %     display(rheight_front);
@@ -48,7 +48,7 @@ function result = main(path_front, path_side, absH, rheight_front, rheight_side,
     %chest_sideways = relC_sideways * sideways.tempH;
 
     %% waistline 
-    %hold off;
+    hold off;
 %     im = imread(path_frontView);
 %     figure;
 %     imshow(im);
@@ -59,8 +59,8 @@ function result = main(path_front, path_side, absH, rheight_front, rheight_side,
 
     chest_tform = fitgeotrans(joint_sideways, joint_front, 'projective'); % rotation matrix
     chest_r = transformPointsForward(chest_tform, joint_sideways);
-    %plot(front.chestMidpoint(:,1), front.chestMidpoint(:,2),'r+')
-    %plot(chest_r(5,1), chest_r(5,2), 'yo');
+    plot(front.chestMidpoint(:,1), front.chestMidpoint(:,2),'r+')
+    plot(chest_r(5,1), chest_r(5,2), 'yo');
     chest_temp = norm(front.chestMidpoint - chest_r(5,:)) * front.tempH;
 
     %% Waist
@@ -91,7 +91,6 @@ function result = main(path_front, path_side, absH, rheight_front, rheight_side,
     result.chest_front = chest_front;
     result.chest_side = chest_width;
     result.chest_len = chest_len;
-    result.chest_len_male = chest_len_male - 0.618;
+    result.chest_len_male = chest_len_male;
     result.angle = angle;
-    
 end

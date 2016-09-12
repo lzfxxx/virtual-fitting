@@ -12,8 +12,8 @@ function sideways = sideView(path, setting, absH, rheight, rwaist, rtoe, rchest_
     rbot = rheight(2, :);
     rleftWaist = rwaist(1, :);
     rrightWaist = rwaist(2, :);
-%     rleftChest = rchest(1, :);
-%     rrightChest = rchest(2, :);
+    %rleftChest = rchest(1, :);
+    %rrightChest = rchest(2, :);
     im = imread(path);
 
     %% edge detection init
@@ -28,12 +28,12 @@ function sideways = sideView(path, setting, absH, rheight, rwaist, rtoe, rchest_
     
     %points = getInput(2, 'height');
     points = rheight;
-    line(points(:, 1),points(:, 2), 'linewidth', 3);
+    %line(points(:, 1),points(:, 2), 'linewidth', 3);
     sole = points(2, :);
     
     %toe = getInput(1, 'toe');
     toe = rtoe;
-    line([sole(1, 1), toe(1, 1)], [sole(1, 2), toe(1, 2)]);
+    %line([sole(1, 1), toe(1, 1)], [sole(1, 2), toe(1, 2)]);
     temp = [sole(1, 1), toe(1, 2)];
     len1 = norm(temp - toe);
     len2 = norm(toe - sole);
@@ -109,7 +109,7 @@ function sideways = sideView(path, setting, absH, rheight, rwaist, rtoe, rchest_
         leftWaist_y = waist_y;
         
         if leftWaist_x == -1
-            display('unable to auto detect waist');
+            display('unable to auto detect waist left side @sideView');
         end
         
 %         plot(leftWaist_x, y, 'g+');
@@ -139,7 +139,7 @@ function sideways = sideView(path, setting, absH, rheight, rwaist, rtoe, rchest_
         rightWaist_y = waist_y;
         
         if rightWaist_x == -1
-            display('unable to auto detect waist');
+            display('unable to auto detect waist right side @sideView');
         end
 
 %         plot(rightWaist_x, y, 'g+');
@@ -236,7 +236,7 @@ function sideways = sideView(path, setting, absH, rheight, rwaist, rtoe, rchest_
         leftChest_y = chest_y;
 
         if leftChest_x == -1
-            display('unable to auto detect waist');
+            display('unable to auto detect chest left side @sideView');
         end
         
 %         plot(leftChest_x, y, 'g+');
@@ -266,7 +266,7 @@ function sideways = sideView(path, setting, absH, rheight, rwaist, rtoe, rchest_
         rightChest_y = chest_y;
     
         if rightChest_x == -1
-            display('unable to auto detect waist');
+            display('unable to auto detect chest right side @sideView');
         end
         
 %         plot(rightChest_x, y, 'g+');

@@ -235,7 +235,7 @@ class Results(Resource):
     user_info = mongo.db.users.find_one({"username": user_id})
     H = user_info.get("H")
     waist = user_info.get("waist_len")
-    chest = user_info.get("chest_len_male")
+    chest = user_info.get("chest_len")
     return {"height": H, "waist": waist, "chest": chest, "response": "200 ok"}
 
 ##

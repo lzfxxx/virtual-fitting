@@ -30,7 +30,7 @@ function front = frontView(path, setting, absH,  rheight, rwaist, rchest)
     
     %points = getInput(2, 'height');
     points = rheight;
-    %line(points(:, 1),points(:, 2),'linewidth', 3);
+%     line(points(:, 1),points(:, 2),'linewidth', 3);
     
     roof = points(1, :);
     foot = points(2, :);
@@ -39,7 +39,7 @@ function front = frontView(path, setting, absH,  rheight, rwaist, rchest)
 
     waist_y = (1 * points(1, 2) + 0.618 * points(2, 2)) / 1.618;
     throat_y = (1 * points(1, 2) + 0.618 * waist_y) / 1.618;
-    chest_y = (0.678 * throat_y + 1 * waist_y) / 1.618;
+    chest_y = (0.668 * throat_y + 1 * waist_y) / 1.618;
     
     shoulder_top_y =  (points(1, 2) + 0.1 * points(2, 2)) / 1;
     shoulder_bot_y =  (points(1, 2) + 0.22 * points(2, 2)) / 1;%for sideways
@@ -89,7 +89,7 @@ function front = frontView(path, setting, absH,  rheight, rwaist, rchest)
         result = 0;
         xRange = 4;
         yRange = int32(4 / tempH);%relative distance of 4cm
-
+      
         for i = head : -1 : tail
             if eim(y, i) == 1 %parameter order of eim(y, x) is different from plot(x, y)
                 gain = calGain_waist(i, y, xRange, yRange, eim);
@@ -104,7 +104,7 @@ function front = frontView(path, setting, absH,  rheight, rwaist, rchest)
         leftWaist_y = waist_y;
         
         if leftWaist_x == -1
-            display('unable to auto detect waist left side @frontView');
+            display('unable to auto detect waist');
         end
         
 %         plot(leftWaist_x, y, 'g+');
@@ -134,7 +134,7 @@ function front = frontView(path, setting, absH,  rheight, rwaist, rchest)
         rightWaist_y = waist_y;
 
         if rightWaist_x == -1
-            display('unable to auto detect waist right side @frontView');
+            display('unable to auto detect waist');
         end
         
 %         plot(rightWaist_x, y, 'g+');
@@ -235,7 +235,7 @@ function front = frontView(path, setting, absH,  rheight, rwaist, rchest)
         leftChest_y = chest_y;
 
         if leftChest_x == -1
-            display('unable to auto detect chest left side @frontView');
+            display('unable to auto detect waist');
         end
         
 %         plot(leftChest_x, y, 'g+');
@@ -265,7 +265,7 @@ function front = frontView(path, setting, absH,  rheight, rwaist, rchest)
         rightChest_y = chest_y;
 
         if rightChest_x == -1
-            display('unable to auto detect chest right side@frontView');
+            display('unable to auto detect waist');
         end
         
 %         plot(rightChest_x, y, 'g+');

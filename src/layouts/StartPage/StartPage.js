@@ -14,6 +14,7 @@ const SubMenu = Menu.SubMenu;
 import styles from './StartPage.less';
 import Login from '../Login/Login';
 import Signup from '../Signup/Signup';
+import Global from '../../services/Global';
 
 class Sider extends Component {
 
@@ -114,11 +115,11 @@ class Sider extends Component {
           <div className={styles.container}>
             <div className={styles.content}>
               <div style={{ height: 590, borderWidth: 3 }}>
-                <div className={styles.normal}>
-                  <div className={styles.container_s}>
-                    <h1 className={styles.title}>Fitting Room</h1>
-                    <p className={styles.desc}>A Virtual Fitting Room</p>
-                    <Button type="primary" style={{ marginTop: 5 }} onClick={() => this.showModal()}>Getting Started</Button>
+                <div className={styles.normal} >
+                  <div className={styles.container_s} style={{backgroundImage:'url(' + Global.img + 'rooms2.jpg)', backgroundSize: 'cover', backgroundPosition: 'center'}}>
+                      <h1 className={styles.title}>Fitting Room</h1>
+                      <p className={styles.desc}>A virtual fitting room can auto measure your cloth size from photos</p>
+                      <Button type="ghost" style={{ marginTop: 5, color: 'white'}} onClick={() => this.showModal()}>Getting Started</Button>
                   </div>
                 </div>
               </div>

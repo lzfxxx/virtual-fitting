@@ -65,7 +65,7 @@ class UploadPage extends Component {
   render() {
     return (
       <div>
-        <div style={{top: 100, right: 50, position: 'absolute'}}>
+        <div style={{top: 90, right: 50, position: 'absolute'}}>
           Please upload your front and side photos, for guide press the question button&nbsp;&nbsp;&nbsp;
           <Button type="ghost"  shape="circle-outline" icon="question-circle-o"  onClick={() => this.showModal()}>
           </Button>

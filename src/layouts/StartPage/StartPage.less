@@ -35,6 +35,9 @@
   //justify-content: center;
   border-bottom: 1px solid #e9e9e9;
   //border: 1px solid #ff0000;
+  box-shadow: 10px 10px 5px #888888;
+  z-index: 1;
+
 }
 
 .aside .row {
@@ -87,12 +90,13 @@
 }
 
 .aside .container {
-  margin: 24px 16px;
+  //margin: 5px 0px;
+  z-index: -1;
 }
 
 .aside .content {
   background: #fff;
-  padding: 24px;
+  //padding: 24px;
 }
 
 .aside .footer {
@@ -116,7 +120,7 @@
   width: 100%;
   height: 100%;
   //min-height: 100vh;//calc(100% ~"-" 64px);
-  padding-top: 120px;
+  //padding-top: 120px;
   //border: 1px solid #ff0000;
 
 }
@@ -124,19 +128,29 @@
 .container_s {
   padding: 0;
   margin: 0 auto;
-  width: 620px;
-  height: 300px;
+  width: 100%;
+  height: 100%;
   text-align: center;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+}
+
+.content {
+
 }
 
 .title {
-  font-size: 80px;
-  color: #666;
-  margin-top: 20px;
-  margin-bottom: 10px;
+  font-size: 45px;
+  color: white;
+  //margin-top: 20px;
+  //margin-bottom: 10px;
 }
 
 .desc {
   font-size: 14px;
+  color: white;
+
 }
 
