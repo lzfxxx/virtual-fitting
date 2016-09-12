@@ -97,7 +97,7 @@ class Sider extends Component {
 
                    ]}
             >
-              <Signup />
+              <Signup cancel={() => handleCancel()} />
             </Modal>
           </Col>
 

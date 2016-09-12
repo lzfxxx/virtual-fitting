@@ -39,7 +39,7 @@ cd assets/ && python simple-cors-http-server.py
 npm start
 ```
 ```
-python api.py
+cd server/ && python api.py
 ```
 ```
 mongod

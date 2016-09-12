@@ -1,5 +1,6 @@
 import React, { Component, PropTypes } from 'react';
-import { message, Upload, Icon, Modal, Button } from 'antd';
+import { message, Upload, Icon, Modal, Button, Progress } from 'antd';
+import { Router, Route, IndexRoute, Link, browserHistory } from 'react-router';
 import styles from './Upload.less';
 import request from 'superagent';
 import cookie from 'react-cookie';
@@ -34,6 +35,7 @@ function getUsername() {
 
 class UploadPage extends Component {
   constructor(props) {
+
     super(props);
     this.username = getUsername();
     this.state = {
@@ -56,11 +58,16 @@ class UploadPage extends Component {
     });
   }
 
+  /*
+   style={{top: 100, right: 30, position: 'absolute'}}
+   */
+
   render() {
     return (
       <div>
-        <div >
-          <Button type="ghost" style={{top: 100, right: 30, position: 'absolute'}} shape="circle-outline" icon="question-circle-o"  onClick={() => this.showModal()}>
+        <div style={{top: 100, right: 50, position: 'absolute'}}>
+          Please upload your front and side photos, for guide press the question button&nbsp;&nbsp;&nbsp;
+          <Button type="ghost"  shape="circle-outline" icon="question-circle-o"  onClick={() => this.showModal()}>
           </Button>
           <div style={{height: '25px'}}></div>
           <Modal ref="modal"
@@ -96,6 +103,7 @@ class ImageUpload extends Component {
         url: 'http://www.baidu.com/xxx.png',
       }]
     };
+
   }
 
   componentDidUpdate() {
@@ -140,21 +148,40 @@ class ImageUpload extends Component {
   handleChange(info) {
     let fileList = info.fileList;
     if(info.file.status == 'uploading') {
+      // console.log(info);
+
       if(!this.state.iconLoading) {
-        this.setState({ iconLoading: true });
+        this.setState({
+          iconLoading: true,
+          uploading: true
+          // percentage:
+        });
         this.hide2 = message.loading('Uploading...', 0);
-        console.log("111");
+      }
+      if(info.event) {
+        if(info.event.percent) {
+          this.setState({
+            // iconLoading: true
+            percentage: info.event.percent
+          });
+        }
       }
     }
+    console.log(info.file.status);
     if(info.file.status == 'done') {
       this.setState({
         priviewImage: this.props.URL+'?t='+new Date().getTime(),
         iconLoading: false,
+        uploading: false,
         isImg: 'true'
       }, () => {
         // console.log(this.state.iconLoading);
         setTimeout(this.hide2, 0);
         message.success('Upload Succeed');
+        if(/img2.jpg/.test(this.props.URL)) {
+          window.key = '3';
+          browserHistory.push('/adjust_'+getUsername());
+        }
       });
     } else if(info.file.status === 'error') {
       this.setState({
@@ -164,6 +191,26 @@ class ImageUpload extends Component {
       message.error("Upload Failed");
     }
     this.setState({ fileList });
+  }
+
+  percentage() {
+    if(this.state.iconLoading) {
+      // var i = 1;
+      // var interval = setInterval( increment, 1000);
+      // function increment(){
+      //   i += 2;
+      // }
+      // if(this.state.uploading === false) {
+      //   interval = 99;
+      // }
+      if(this.state.percentage == 100) {
+        this.state.percentage = 99;
+      }
+      return <div style={{ width: 170 }}>
+        <Progress percent={this.state.percentage} strokeWidth={5}/>
+      </div>
+    }
+    return;
   }
 
   render() {
@@ -177,6 +224,7 @@ class ImageUpload extends Component {
     return (
       <div className={styles.imgContainer} style={{borderWidth: this.props.border}}>
         {this.getMessage()}
+        {this.percentage()}
         <div className={styles.img}>
           <img className={styles.imgSelf} alt="Please upload your image" src={this.state.priviewImage} />
         </div>

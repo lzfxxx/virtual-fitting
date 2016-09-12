@@ -2,7 +2,7 @@ import React, {Component} from 'react';
 import ReactDOM from 'react-dom';
 import { Router, Route, IndexRoute, Link, browserHistory } from 'react-router';
 import styles from './Mark.less';
-import { Icon, Modal, Button, Tabs,message, Input } from 'antd';
+import { Icon, Modal, Button, Tabs,message, Input, Popover } from 'antd';
 import request from 'superagent';
 import cookie from 'react-cookie';
 import Vedio from '../Vedio/Vedio';
@@ -50,6 +50,7 @@ class MarkPage extends Component {
       url: Global.url + this.username + '/*',
       computeURL: Global.url + 'compute/' + this.username,
       visible: false,
+      key: "1",
       // URL1: 'http://0.0.0.0:5000/' + this.props.params.username + '/img1.jpg',
       // URL2: 'http://0.0.0.0:5000/' + this.props.params.username + '/img2.jpg',
       // URL3: 'http://0.0.0.0:5000/' + this.props.params.username + '/img3.jpg',
@@ -68,7 +69,13 @@ class MarkPage extends Component {
       visible: true,
     });
   }
+  changeKey(key) {
+    this.setState({key: key});
+  }
 
+  onTabClick(activeKey) {
+    this.setState({ key: activeKey });
+  }
   render() {
     function callback(key) {
       console.log(key);
@@ -76,21 +83,24 @@ class MarkPage extends Component {
 
     return (
       <div>
-        <Button type="ghost" style={{top: 100, right: 30, position: 'absolute'}} shape="circle-outline" icon="question-circle-o"  onClick={() => this.showModal()}>
-        </Button>
-        <Modal ref="modal"
-               visible={this.state.visible}
-               title="Demo" onCancel={() => this.handleCancel()}
-               footer={[]}
-        >
-          <Vedio height={"300px"}/>
-        </Modal>
-        <Tabs defaultActiveKey="1" onChange={callback}>
+        <div style={{top: 100, right: 50, position: 'absolute'}}>
+          Please mark your front and side photos, for guide press the question button&nbsp;&nbsp;&nbsp;
+          <Button type="ghost"  shape="circle-outline" icon="question-circle-o"  onClick={() => this.showModal()}>
+          </Button>
+          <Modal ref="modal"
+                 visible={this.state.visible}
+                 title="Demo" onCancel={() => this.handleCancel()}
+                 footer={[]}
+          >
+            <Vedio height={"300px"}/>
+          </Modal>
+        </div>
+        <Tabs activeKey={this.state.key} onChange={callback} onTabClick={(activeKey) => this.onTabClick(activeKey)}>
           <TabPane tab="Front Photo" key="1" className={styles.tab}>
-            <Mark URL={this.state.URL1} tab={"1"} url={this.state.url} resultsURL={this.state.computeURL}/>
+            <Mark URL={this.state.URL1} tab={"1"} url={this.state.url} resultsURL={this.state.computeURL} func={() => this.changeKey("2")}/>
           </TabPane>
           <TabPane tab="Side Photo" key="2" className={styles.tab}>
-            <Mark2 URL={this.state.URL2} tab={"2"} url={this.state.url} resultsURL={this.state.computeURL}/>
+            <Mark2 URL={this.state.URL2} tab={"2"} url={this.state.url} resultsURL={this.state.computeURL} func={() => this.changeKey("2")}/>
           </TabPane>
         </Tabs>
       </div>
@@ -104,6 +114,12 @@ var Mark = React.createClass({
       mouseFT: [250,100],
       mouseFB: [250,400],
       loading: false,
+      // info: "Drag any point",
+      // pointsVisibility: {
+      //   "FT": false,
+      //   "FB": false,
+      // },
+      info: "Choose one point to drag"
     };
   },
   componentWillMount() {
@@ -199,14 +215,16 @@ var Mark = React.createClass({
   push() {
     switch(this.props.tab) {
       case "1":
+        this.props.func();
         break;
       case "2":
-        browserHistory.push('/results');
+        browserHistory.push('/results_'+getUsername());
         break;
     }
   },
   confirm() {
     this.enterLoading();
+
 
     if(this.state.mouseFT[0] == 250 && this.state.mouseFT[1] == 100
       && this.state.mouseFB[0] == 250 && this.state.mouseFB[1] == 400) {
@@ -224,6 +242,7 @@ var Mark = React.createClass({
           console.log("Error!!!");
         } else {
           console.log(res);
+          this.push();
         }
         this.setState({ loading: false });
       });
@@ -242,6 +261,49 @@ var Mark = React.createClass({
         break;
     }
   },
+  mouseOver(point) {
+    this.point = point;
+    // var pointsVisibility ={
+    //   "FT": false,
+    //   "FB": false
+    // };
+    // pointsVisibility[point] = true;
+    switch(point) {
+      case "FT":
+        this.setState({
+          info: "Drag this point to the top of your body",
+          // pointsVisibility: pointsVisibility
+        });
+        break;
+      case "FB":
+        this.setState({
+          info: "Drag this point to the bottom of your body",
+          // pointsVisibility: pointsVisibility
+        });
+        break;
+    }
+  },
+  textPos(pointStyleFT, pointStyleFB) {
+    switch(this.point) {
+      case "FT":
+        return {
+          top: pointStyleFT.top+15,
+          left: pointStyleFT.left-100,
+          position: "absolute"
+        };
+      case "FB":
+        return {
+          top: pointStyleFB.top-30,
+          left: pointStyleFB.left-100,
+          position: "absolute"
+        };
+    }
+    return {
+      top: -1000,
+      left: -1000,
+      position: "absolute"
+    };
+  },
   render: function(){
     var pointStyleFT = {
       top: this.state.mouseFT[1],
@@ -253,13 +315,16 @@ var Mark = React.createClass({
     };
     return (
       <div className={styles.container}>
+        <div style={this.textPos(pointStyleFT, pointStyleFB)}><p style={{color: "white", fontWeight: 'bold'}}>{this.state.info}</p></div>
         <div>
           <img className={styles.radial} src={this.src} />
-          <div className={styles.point} style={pointStyleFT} onMouseDown={(e) => this.mouseDown(e,"FT")}>FT</div>
-          <div className={styles.point} style={pointStyleFB} onMouseDown={(e) => this.mouseDown(e,"FB")}>FB</div>
+          <div className={styles.point} style={pointStyleFT} onMouseDown={(e) => this.mouseDown(e,"FT")} onMouseOver={() => this.mouseOver("FT")}>
+            FT
+          </div>
+          <div className={styles.point} style={pointStyleFB} onMouseDown={(e) => this.mouseDown(e,"FB")} onMouseOver={() => this.mouseOver("FB")}>FB</div>
         </div>
         <div className={styles.container2}>
-          <h2>Please mark your photo</h2>
+          <h2>{this.state.info}</h2>
           <br />
           <div
             style={{
@@ -291,7 +356,9 @@ var Mark2 = React.createClass({
       mouseTC: [220,400],
       mouseCC: [250,250],
       height: '',
-      loading: false
+      loading: false,
+      info: "Choose one point to drag"
+
     };
   },
   componentWillMount() {
@@ -397,6 +464,7 @@ var Mark2 = React.createClass({
       case "1":
         break;
       case "2":
+        window.key = '5';
         browserHistory.push('/results_'+getUsername());
         break;
     }
@@ -408,8 +476,6 @@ var Mark2 = React.createClass({
     });
   },
   confirm() {
-    this.enterLoading();
-    this.hide = message.loading('Computing your body size...', 0);
 
 
     if(this.state.mouseST[0] == 250 && this.state.mouseST[1] == 100
@@ -425,6 +491,8 @@ var Mark2 = React.createClass({
       this.setState({ loading: false });
       return;
     }
+    this.enterLoading();
+    this.hide = message.loading('Computing your body size...', 0);
     var data = this.setData();
     request
       .put(this.props.url)
@@ -470,6 +538,65 @@ var Mark2 = React.createClass({
         break;
     }
   },
+  mouseOver(point) {
+    this.point = point;
+    switch(point) {
+      case "ST":
+        this.setState({
+          info: "Drag this point to the top of your body"
+        });
+        break;
+      case "SB":
+        this.setState({
+          info: "Drag this point to the bottom of your body"
+        });
+        break;
+      case "TC":
+        this.setState({
+          info: "Drag this point to the center of tiptoes"
+        });
+        break;
+      case "CC":
+        this.setState({
+          info: "Drag this point to the center of your chest"
+        });
+        break;
+    }
+  },
+  textPos(pointStyleST, pointStyleSB, pointStyleTC, pointStyleCC) {
+    switch(this.point) {
+      case "ST":
+        return {
+          top: pointStyleST.top+15,
+          left: pointStyleST.left-100,
+          position: "absolute"
+        };
+      case "SB":
+        return {
+          top: pointStyleSB.top-30,
+          left: pointStyleSB.left-100,
+          position: "absolute"
+        };
+      case "TC":
+        return {
+          top: pointStyleTC.top-30,
+          left: pointStyleTC.left-100,
+          position: "absolute"
+        };
+      case "CC":
+        return {
+          top: pointStyleCC.top+15,
+          left: pointStyleCC.left-100,
+          position: "absolute"
+        };
+    }
+    return {
+      top: -1000,
+      left: -1000,
+      position: "absolute"
+    };
+  },
+
   render: function(){
     var pointStyleST = {
       top: this.state.mouseST[1],
@@ -489,15 +616,18 @@ var Mark2 = React.createClass({
     };
     return (
       <div className={styles.container}>
+        <div style={this.textPos(pointStyleST, pointStyleSB, pointStyleTC, pointStyleCC)}>
+          <p style={{color: "white", fontWeight: 'bold'}}>{this.state.info}</p>
+        </div>
         <div>
           <img className={styles.radial} src={this.src} />
-          <div className={styles.point} style={pointStyleST} onMouseDown={(e) => this.mouseDown(e,"ST")}>ST</div>
-          <div className={styles.point} style={pointStyleSB} onMouseDown={(e) => this.mouseDown(e,"SB")}>SB</div>
-          <div className={styles.point} style={pointStyleTC} onMouseDown={(e) => this.mouseDown(e,"TC")}>TC</div>
-          <div className={styles.point} style={pointStyleCC} onMouseDown={(e) => this.mouseDown(e,"CC")}>CC</div>
+          <div className={styles.point} style={pointStyleST} onMouseDown={(e) => this.mouseDown(e,"ST")} onMouseOver={() => this.mouseOver("ST")}>ST</div>
+          <div className={styles.point} style={pointStyleSB} onMouseDown={(e) => this.mouseDown(e,"SB")} onMouseOver={() => this.mouseOver("SB")}>SB</div>
+          <div className={styles.point} style={pointStyleTC} onMouseDown={(e) => this.mouseDown(e,"TC")} onMouseOver={() => this.mouseOver("TC")}>TC</div>
+          <div className={styles.point} style={pointStyleCC} onMouseDown={(e) => this.mouseDown(e,"CC")} onMouseOver={() => this.mouseOver("CC")}>CC</div>
         </div>
         <div className={styles.container2}>
-          <h2>Please mark your photo</h2>
+          <h2>{this.state.info}</h2>
           <br />
           <div
             style={{

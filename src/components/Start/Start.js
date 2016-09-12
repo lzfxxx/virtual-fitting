@@ -1,11 +1,11 @@
 import React, { Component, PropTypes } from 'react';
-import { Button } from 'antd';
+import { Button, Steps } from 'antd';
 import { Router, Route, IndexRoute, Link, browserHistory } from 'react-router';
 import styles from './Start.less';
 require('es6-promise').polyfill();
 import fetch from 'isomorphic-fetch';
 import cookie from 'react-cookie';
-
+const Step = Steps.Step;
 
 const URL = 'http://127.0.0.1:5000/api';
 function getUsername() {
@@ -71,10 +71,47 @@ class StartPage extends Component {
     return (
       <div className={styles.normal}>
         <div className={styles.container}>
-          <h1 className={styles.title}>A Virtual Fitting Room</h1>
-          <p className={styles.desc}>Description</p>
-          <p className={styles.desc}>DescriptionDescriptionDescriptionDescription</p>
-          <p className={styles.desc}>DescriptionDescriptionDescriptionDescriptionDescriptionDescriptionDescriptionDescription</p>
+          <h1 className={styles.title}>What to Do</h1>
+          <br />
+          <br />
+          <div className={styles.container2}>
+            <div style={{flex: 1, textAlign: 'left'}}>
+              <b style={{fontSize: 15}}>1.&nbsp;&nbsp;&nbsp;Upload</b><br /><br />
+              <Steps direction="vertical" size="small">
+                <Step title="Press Upload" description="Press left button on the page" status={"process"}/>
+                <Step title="Choose Front" description="Choose one of your front photos" status={"process"}/>
+                <Step title="Press Upload" description="Press right button on the page" status={"process"}/>
+                <Step title="Choose Side" description="Choose one of your side photos" status={"process"}/>
+              </Steps>
+            </div>
+            <div style={{flex: 1, textAlign: 'left'}}>
+              <b style={{fontSize: 15}}>2.&nbsp;&nbsp;&nbsp;Adjust</b><br /><br />
+              <Steps direction="vertical" size="small" current={0}>
+                <Step title="Crop Front" description="Crop your front photo in the cropper" status={"process"}/>
+                <Step title="Confirm Front" description="Press crop and confirm after finishing" status={"process"}/>
+                <Step title="Crop Side" description="Crop your side photo in the cropper" status={"process"}/>
+                <Step title="Confirm Side" description="Press crop and confirm after finishing" status={"process"}/>
+              </Steps>
+            </div>
+            <div style={{flex: 1, textAlign: 'left'}}>
+              <b style={{fontSize: 15}}>3.&nbsp;&nbsp;&nbsp;Mark</b><br /><br />
+              <Steps direction="vertical" size="small" current={0}>
+                <Step title="Mark Front" description="Drag points to mark your front photo" status={"process"}/>
+                <Step title="Confirm Front" description="Press confirm button" status={"process"}/>
+                <Step title="Mark Side" description="Drag points to mark your side photo" status={"process"}/>
+                <Step title="Confirm Side" description="Input your height and confirm" status={"process"}/>
+              </Steps>
+            </div>
+            <div style={{flex: 1, textAlign: 'left'}}>
+              <b style={{fontSize: 15}}>4.&nbsp;&nbsp;&nbsp;Results</b><br /><br />
+              <Steps direction="vertical" size="small" current={0}>
+                <Step title="Results" description="The 3D models shows your body and clothes" status={"process"}/>
+                <Step title="Fitting Cloth" description="Choose different cloth size to fitting" status={"process"}/>
+              </Steps>
+            </div>
+          </div>
+          <br />
+          <br />
           <Button type="primary" style={{ marginTop: 5 }} onClick={() => this.push()}>Getting Started</Button>
         </div>
       </div>

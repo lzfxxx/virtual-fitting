@@ -24,6 +24,13 @@ function getUsername() {
   }
 }
 
+const sHeight = 170;
+const mHeight = 180;
+const lHeight = 190;
+const clothOHeight = 194;
+const clothOChest = 112;
+const clothOWaist = 106;
+
 class ResultPage extends React.Component {
 
   constructor(props) {
@@ -50,14 +57,24 @@ class ResultPage extends React.Component {
       .then((responseJson) => {
         // Global.token = responseJson.token;
         console.log(responseJson);
-        Global.heightSetting = parseInt(responseJson.height);
-        Global.chestSetting = parseInt(responseJson.chest);
-        Global.waistSetting = parseInt(responseJson.waist);
+        if(responseJson.chest - 15 > clothOChest/clothOHeight*sHeight
+          || responseJson.waist - 20 > clothOWaist/clothOHeight*sHeight) {
+          console.log(responseJson.chest, clothOChest/clothOHeight*sHeight, responseJson.waist, clothOWaist/clothOHeight*sHeight);
+          this.state.typeArray = ["dashed", "primary", "default"];
+          this.state.clothScale = 2;
+        }
+        if(responseJson.chest - 15 > clothOChest/clothOHeight*mHeight
+          || responseJson.waist - 20 > clothOWaist/clothOHeight*mHeight) {
+          console.log(responseJson.chest - 15, clothOChest/clothOHeight*mHeight, responseJson.waist - 20, clothOWaist/clothOHeight*mHeight);
+          this.state.typeArray = ["dashed", "dashed", "primary"];
+          this.state.clothScale = 3;
+        }
         this.setState({
           heightSetting: parseInt(responseJson.height),
           chestSetting: parseInt(responseJson.chest),
           waistSetting: parseInt(responseJson.waist),
         });
+
         var heightSetting = parseInt(responseJson.height);
         var chestSetting = parseInt(responseJson.chest);
         var waistSetting = parseInt(responseJson.waist);
@@ -585,20 +602,20 @@ class ResultPage extends React.Component {
           // var threeObject = object.children[0];
           // const scale = 0.003;
           var Scale = 1;
-          var def = 170/194;
-          var clothHeight = 170;
+          var def = sHeight/194;
+          var clothHeight = sHeight;
           switch(clothScale) {
             case 1:
               Scale = 1;
-              clothHeight = 170;
+              clothHeight = sHeight;
               break;
             case 2:
-              Scale = 180/170;
-              clothHeight = 180;
+              Scale = mHeight/sHeight;
+              clothHeight = mHeight;
               break;
             case 3:
-              Scale = 190/170;
-              clothHeight = 190;
+              Scale = lHeight/sHeight;
+              clothHeight = lHeight;
               break;
           }
           // alert(clothScale);
@@ -991,35 +1008,87 @@ class ResultPage extends React.Component {
 
     }
   }
-
-  changeSize(size) {
-    switch(size) {
-      case "S":
-        this.setState({
-          typeArray: ["primary" , "default", "default"],
-          clothScale: 1
-        }, () => {
-          this.renderModels(Global.heightSetting, Global.chestSetting, Global.waistSetting, this.state.clothScale);
-        });
-        break;
-      case "M":
-        this.setState({
-          typeArray: ["default" , "primary", "default"],
-          clothScale: 2
-        }, () => {
-          this.renderModels(Global.heightSetting, Global.chestSetting, Global.waistSetting, this.state.clothScale);
-        });
-        break;
-      case "L":
-        this.setState({
-          typeArray: ["default" , "default", "primary"],
-          clothScale: 3
-        }, () => {
-          this.renderModels(Global.heightSetting, Global.chestSetting, Global.waistSetting, this.state.clothScale);
-        });
-        break;
+  changeSizeS() {
+    if(this.state.typeArray[0] != "default") {
+      return;
     }
+    this.setState({
+      typeArray: ["primary" , "default", "default"],
+      clothScale: 1
+    }, () => {
+      this.renderModels(this.state.heightSetting, this.state.chestSetting, this.state.waistSetting, this.state.clothScale);
+    });
   }
+  changeSizeM() {
+    if(this.state.typeArray[1] != "default") {
+      return;
+    }
+    if(this.state.typeArray[0] == "dashed") {
+      this.setState({
+        typeArray: ["dashed" , "primary", "default"],
+        clothScale: 2
+      }, () => {
+        this.renderModels(this.state.heightSetting, this.state.chestSetting, this.state.waistSetting, this.state.clothScale);
+      });
+      return;
+    }
+    this.setState({
+      typeArray: ["default" , "primary", "default"],
+      clothScale: 2
+    }, () => {
+      this.renderModels(this.state.heightSetting, this.state.chestSetting, this.state.waistSetting, this.state.clothScale);
+    });
+  }
+  changeSizeL() {
+    if(this.state.typeArray[2] != "default") {
+      return;
+    }
+    // console.log(this.state.typeArray[0] == "dashed");
+
+    if(this.state.typeArray[0] == "dashed") {
+      this.setState({
+        typeArray: ["dashed" , "default", "primary"],
+        clothScale: 3
+      }, () => {
+        this.renderModels(this.state.heightSetting, this.state.chestSetting, this.state.waistSetting, this.state.clothScale);
+      });
+      return;
+    }
+    this.setState({
+      typeArray: ["default" , "default", "primary"],
+      clothScale: 3
+    }, () => {
+      this.renderModels(this.state.heightSetting, this.state.chestSetting, this.state.waistSetting, this.state.clothScale);
+    });
+  }
+  // changeSize(size) {
+  //   switch(size) {
+  //     case "S":
+  //         this.setState({
+  //         typeArray: ["primary" , "default", "default"],
+  //         clothScale: 1
+  //       }, () => {
+  //         this.renderModels(this.state.heightSetting, this.state.chestSetting, this.state.waistSetting, this.state.clothScale);
+  //       });
+  //       break;
+  //     case "M":
+  //       this.setState({
+  //         typeArray: ["default" , "primary", "default"],
+  //         clothScale: 2
+  //       }, () => {
+  //         this.renderModels(this.state.heightSetting, this.state.chestSetting, this.state.waistSetting, this.state.clothScale);
+  //       });
+  //       break;
+  //     case "L":
+  //       this.setState({
+  //         typeArray: ["default" , "default", "primary"],
+  //         clothScale: 3
+  //       }, () => {
+  //         this.renderModels(this.state.heightSetting, this.state.chestSetting, this.state.waistSetting, this.state.clothScale);
+  //       });
+  //       break;
+  //   }
+  // }
 
   handleCancel() {
     this.setState({
@@ -1047,9 +1116,9 @@ class ResultPage extends React.Component {
           <Vedio height={"300px"}/>
         </Modal>
         <ButtonGroup style={{paddingTop: 5, paddingBottom: 5}}>
-          <Button type={this.state.typeArray[0]} onClick={() => this.changeSize("S")}>S</Button>
-          <Button type={this.state.typeArray[1]} onClick={() => this.changeSize("M")}>M</Button>
-          <Button type={this.state.typeArray[2]} onClick={() => this.changeSize("L")}>L</Button>
+          <Button type={this.state.typeArray[0]} onClick={() => this.changeSizeS()}>S</Button>
+          <Button type={this.state.typeArray[1]} onClick={() => this.changeSizeM()}>M</Button>
+          <Button type={this.state.typeArray[2]} onClick={() => this.changeSizeL()}>L</Button>
         </ButtonGroup>
         <br />
         <div style={{position: 'absolute', top: 180, left: 280}}>

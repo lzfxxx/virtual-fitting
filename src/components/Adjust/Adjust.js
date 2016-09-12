@@ -3,6 +3,7 @@ import Cropper from 'react-cropper';
 import styles from './Adjust.less';
 import 'cropperjs/dist/cropper.css';
 import { Icon, Modal, Button, Tabs,message} from 'antd';
+import { Router, Route, IndexRoute, Link, browserHistory } from 'react-router';
 import request from 'superagent';
 import cookie from 'react-cookie';
 import Vedio from '../Vedio/Vedio';
@@ -62,6 +63,7 @@ class CropperPage extends Component {
       URL1: Global.url + this.username + '/img1.jpg',
       URL2: Global.url + this.username + '/img2.jpg',
       visible: false,
+      key: "1",
       // URL3: 'http://0.0.0.0:5000/' + this.props.params.username + '/img3.jpg'
     };
   }
@@ -76,30 +78,38 @@ class CropperPage extends Component {
       visible: true,
     });
   }
+  changeKey(key) {
+    this.setState({key: key});
+  }
 
+  onTabClick(activeKey) {
+    this.setState({ key: activeKey });
+  }
 
   render() {
     function callback(key) {
       console.log(key);
     }
-
     return (
       <div>
-        <Button type="ghost" style={{top: 100, right: 30, position: 'absolute'}} shape="circle-outline" icon="question-circle-o"  onClick={() => this.showModal()}>
-        </Button>
-        <Modal ref="modal"
-               visible={this.state.visible}
-               title="Demo" onCancel={() => this.handleCancel()}
-               footer={[]}
-        >
-          <Vedio height={"300px"}/>
-        </Modal>
-        <Tabs defaultActiveKey="1" onChange={callback}>
+        <div style={{top: 100, right: 50, position: 'absolute'}}>
+          Please adjust your front and side photos, for guide press the question button&nbsp;&nbsp;&nbsp;
+          <Button type="ghost"  shape="circle-outline" icon="question-circle-o"  onClick={() => this.showModal()}>
+          </Button>
+          <Modal ref="modal"
+                 visible={this.state.visible}
+                 title="Demo" onCancel={() => this.handleCancel()}
+                 footer={[]}
+          >
+            <Vedio height={"300px"}/>
+          </Modal>
+        </div>
+        <Tabs activeKey={this.state.key} onChange={callback} onTabClick={(activeKey) => this.onTabClick(activeKey)}>
           <TabPane tab="Front Photo" key="1" className={styles.tab}>
-            <MyCropper URL={this.state.URL1}/>
+            <MyCropper URL={this.state.URL1} func={() => this.changeKey("2")}/>
           </TabPane>
           <TabPane tab="Side Photo" key="2" className={styles.tab}>
-            <MyCropper URL={this.state.URL2}/>
+            <MyCropper URL={this.state.URL2} func={() => this.changeKey("2")}/>
           </TabPane>
         </Tabs>
       </div>
@@ -146,6 +156,7 @@ class MyCropper extends Component {
   }
 
   _uploadImage() {
+
     // var img;
     // request
     //   .get(src)
@@ -190,7 +201,12 @@ class MyCropper extends Component {
           console.log(res.status);
           if(res.status='200') {
             message.success('Upload Succeed');
-
+            if(/img2.jpg/.test(this.props.URL)) {
+              window.key = '4';
+              browserHistory.push('/mark_'+getUsername());
+            } else {
+              this.props.func();
+            }
           }
           //console.log(res.text);
         }

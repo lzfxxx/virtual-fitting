@@ -17,6 +17,9 @@ import Signup from '../Signup/Signup';
 import cookie from 'react-cookie';
 import Global from '../../services/Global';
 
+const url = Global.url +'results';
+
+
 function getUsername() {
   if(window.u) {
     return window.u;
@@ -39,12 +42,34 @@ class SiderPage extends Component {
       signvisible: false,
       login: false,
       selectedKey: '1',
-      username: window.u
+      username: window.u,
+      access: false
     };
     this.username = getUsername();
     console.log(window.u,window.p);
     console.log(this.username);
+    this.key = '1';
     window.key = '1';
+  }
+
+  componentDidMount() {
+    fetch(url + "/" + getUsername(), {
+      method: 'get',
+      headers: {
+        'Authorization': 'Token ' + cookie.load("token"),
+      },
+    })
+      .then((response) => response.json())
+      .then((responseJson) => {
+        // Global.token = responseJson.token;
+        console.log(responseJson);
+        if(responseJson.message != "Unauthorized token access") {
+          this.setState({access: true});
+        }
+      })
+      .catch((error) => {
+        console.error(error);
+      });
   }
 
   showModal() {
@@ -91,20 +116,60 @@ class SiderPage extends Component {
     }
   }
 
+  login() {
+    if(this.state.access) {
+      return <div className={styles.col}>
+        <p style={{fontSize: 'large'}}>Welcome! {this.username} &nbsp;</p>
+        <Button type="ghost" icon="logout" onClick={() => this.showModal()}>
+          Logout
+        </Button>
+      </div>
+    }
+    return <div className={styles.col}>
+      <p style={{fontSize: 'large'}}>You are not logged, return home and login&nbsp;</p>
+      <Button type="ghost" icon="home" onClick={() => this.showModal()}>
+        Home
+      </Button>
+    </div>
+  }
+
+  onTabClick(e) {
+    console.log(e);
+    this.key = e.key;
+    window.key = e.key;
+    // this.setState({ selectedKey: e.key });
+  }
+
+  renderChildren(children) {
+    if(this.state.access) {
+      return children;
+    }
+    return <div className={styles.expired}>
+      You are not logged in or your login was expired!<br />
+      Please return home and login<br /><br />
+      <a href="/index"><Button type="primary" style={{ marginTop: 5 }}>Back to home</Button></a>
+    </div>
+  }
+
   render() {
     const { children } = this.props;
+    if(window.key) {
+      this.key = window.key;
+    }
     return (
       <div className={styles.aside}>
         <aside className={styles.sider}>
           <div className={styles.logo}>
-
           </div>
           <Menu mode="inline" theme="light"
-                defaultSelectedKeys={['1']} defaultOpenKeys={['sub1']}>
+                selectedKeys={[this.key]}
+                defaultOpenKeys={['sub1']}
+                onClick={(e) => this.onTabClick(e)}
+          >
             <SubMenu key="sub1"
                      title={<span>
-                     <Icon type="user" />
-                     <Link to="/">Fitting Room</Link><br />
+                       <Icon type="user" />
+                       <Link to="/">Fitting Room</Link><br />
                      </span>}
             >
               <Menu.Item key="1">
@@ -151,17 +216,14 @@ class SiderPage extends Component {
                  className={styles.row}>
               <Col span={10} className={styles.col}> </Col>
               <Col span={10} className={styles.col}>
-                <p style={{fontSize: 'large'}}>Welcome! {this.username} &nbsp;</p>
-                <Button type="ghost" icon="logout" onClick={() => this.showModal()}>
-                  Logout
-                </Button>
+                {this.login()}
               </Col>
             </Row>
           </div>
           <div className={styles.container}>
             <div className={styles.content}>
               <div style={{ height: 590, borderWidth: 3 }}>
-                {children}
+                {this.renderChildren(children)}
               </div>
             </div>
           </div>
