@@ -4,6 +4,7 @@
 
 ```
 node >= 4
+python >= 2.7
 ```
 
 ## Code Style
